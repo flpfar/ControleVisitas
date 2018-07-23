@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Controle de Visitas</string>
+
+    <!-- MainMenu Toolbar Items -->
+    <string name="start_visit">Iniciar Visita</string>
+    <string name="schedule_visit">Agendar Visita</string>
+    <string name="filter_visits">Filtrar Visitas</string>
+    <string name="manage_clients">Gerenciar Clientes</string>
+    <string name="about">Sobre</string>
+
+    <!-- Titles -->
+    <string name="main_title">Visitas Registradas</string>
+
+    <!-- MainActivity Date Toolbar -->
+    <string name="left_arrow">&lt;</string>
+    <string name="right_arrow">&gt;</string>
+    <string name="im_cd_calendar">Ícone de calendário</string>
+
+    <!-- StartVisitActivity -->
+    <string name="client">Cliente</string>
+    <string name="visit_start_time">Início da visita</string>
+    <string name="at_time">às</string>
+    <string name="visit_reason">Motivo da visita</string>
+
+
+</resources>
