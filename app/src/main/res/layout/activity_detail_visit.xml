@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/ac_detail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".DetailVisitActivity">
+
+            <TextView
+                android:id="@+id/ac_detail_tvclient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:text="NOME DO CLIENTE"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/ac_detail_tvstarttime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/visit_start_time"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ac_detail_tvclient" />
+
+            <TextView
+                android:id="@+id/ac_detail_tvstarttime_var"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="01/01/01 às 14:35"
+                app:layout_constraintStart_toEndOf="@+id/ac_detail_tvstarttime"
+                app:layout_constraintTop_toTopOf="@+id/ac_detail_tvstarttime" />
+
+            <TextView
+                android:id="@+id/ac_detail_tvclosingtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/visit_closing_time"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ac_detail_tvstarttime" />
+
+            <TextView
+                android:id="@+id/ac_detail_tvclosingtime_var"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Em andamento"
+                app:layout_constraintStart_toEndOf="@+id/ac_detail_tvclosingtime"
+                app:layout_constraintTop_toTopOf="@+id/ac_detail_tvclosingtime" />
+
+            <TextView
+                android:id="@+id/ac_detail_tvnotes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/notes"
+                android:labelFor="@id/ac_detail_etnotes"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ac_detail_tvclosingtime" />
+
+            <EditText
+                android:id="@+id/ac_detail_etnotes"
+                android:layout_width="match_parent"
+                android:layout_height="115dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_border"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ac_detail_tvnotes" />
+
+            <ImageButton
+                android:id="@+id/ac_detail_ibimages"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="28dp"
+                android:background="@color/colorAccent"
+                android:contentDescription="@string/im_cd_image_gallery"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ac_detail_etnotes"
+                app:srcCompat="@drawable/ic_image_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/ac_detail_ibaudios"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="64dp"
+                android:background="@color/colorAccent"
+                android:contentDescription="@string/im_cd_audio_gallery"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/ac_detail_ibimages"
+                app:srcCompat="@drawable/ic_mic_black_24dp" />
+
+            <TextView
+                android:id="@+id/ac_detail_tvkeywords"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/keywords"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ac_detail_ibimages" />
+
+            <EditText
+                android:id="@+id/ac_detail_etkeyword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="@string/keyword"
+                android:inputType="text"
+                app:layout_constraintEnd_toStartOf="@+id/ac_detail_ibkeyword"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ac_detail_tvkeywords" />
+
+            <ImageButton
+                android:id="@+id/ac_detail_ibkeyword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="8dp"
+                android:contentDescription="@string/im_cd_add_keyword"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ac_detail_etkeyword"
+                app:layout_constraintTop_toTopOf="@+id/ac_detail_etkeyword"
+                app:srcCompat="@drawable/ic_add_black_24dp" />
+
+            <EditText
+                android:id="@+id/ac_detail_etkeywordsbox"
+                android:layout_width="0dp"
+                android:layout_height="99dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:ems="10"
+                android:hint="@string/keywords"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
+                android:background="@drawable/edit_text_border"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ac_detail_etkeyword" />
+
+            <Button
+                android:id="@+id/ac_detail_btclosevisit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/close_visit"
+                android:background="@color/colorAccent"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ac_detail_etkeywordsbox" />
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</LinearLayout>

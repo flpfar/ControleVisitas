@@ -18,17 +18,27 @@
 
     <!-- StartVisitActivity -->
     <string name="client">Cliente</string>
-    <string name="visit_start_time">Início da visita</string>
+    <string name="visit_start_time">Início da visita:</string>
+    <string name="visit_closing_time">Encerramento da visita:</string>
     <string name="at_time">às</string>
     <string name="visit_reason">Motivo da visita</string>
 
     <string name="im_cd_calendar">Selecionar data</string>
     <string name="im_cd_clock">Selecionar hora</string>
     <string name="im_cd_add_client">Novo cliente</string>
+    <string name="im_cd_image_gallery">Galeria de imagens</string>
+    <string name="im_cd_audio_gallery">Galeria de áudios</string>
+    <string name="im_cd_add_keyword">Adicionar palavra-chave</string>
 
     <string name="et_hint_calendar">Data de início</string>
     <string name="et_hint_clock">Hora de início</string>
 
 
+    <string name="visit_detail">Detalhes da visita</string>
+
+    <string name="notes">Notas</string>
+    <string name="keywords">Palavras-chave</string>
+    <string name="keyword">Palavra-chave</string>
+    <string name="close_visit">Encerrar Visita</string>
 
 </resources>
