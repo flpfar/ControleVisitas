@@ -1,5 +1,6 @@
 package br.edu.ifspsaocarlos.sdm.controlevisitas;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,8 +23,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(MainActivity.this, StartVisitActivity.class));
             }
         });
     }
@@ -43,8 +43,25 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.menu_item_start_visit) {
-            return true;
+        switch (id){
+            case R.id.menu_item_start_visit:
+                startActivity(new Intent(MainActivity.this, StartVisitActivity.class));
+                break;
+
+            case R.id.menu_item_schedule_visit:
+                break;
+
+            case R.id.menu_item_filter_visits:
+                break;
+
+            case R.id.menu_item_manage_clients:
+                break;
+
+            case R.id.menu_item_about:
+                break;
+
+            default:
+                 break;
         }
 
         return super.onOptionsItemSelected(item);

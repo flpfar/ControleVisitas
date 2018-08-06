@@ -25,7 +25,7 @@
 
     <string name="im_cd_calendar">Selecionar data</string>
     <string name="im_cd_clock">Selecionar hora</string>
-    <string name="im_cd_add_client">Novo cliente</string>
+    <string name="im_cd_add_client">Novo Cliente</string>
     <string name="im_cd_image_gallery">Galeria de imagens</string>
     <string name="im_cd_audio_gallery">Galeria de áudios</string>
     <string name="im_cd_add_keyword">Adicionar palavra-chave</string>
@@ -40,5 +40,15 @@
     <string name="keywords">Palavras-chave</string>
     <string name="keyword">Palavra-chave</string>
     <string name="close_visit">Encerrar Visita</string>
+
+    <string name="client_name">Nome do Cliente</string>
+    <string name="client_contact">Contato</string>
+    <string name="client_phone">Telefone</string>
+    <string name="client_mail">E-mail</string>
+    <string name="client_save">Salvar Cliente</string>
+
+
+    <!-- Java String Resources -->
+    <string name="no_clients_toast">Não há clientes cadastrados. Redirecionando ao cadastro de cliente... </string>
 
 </resources>
