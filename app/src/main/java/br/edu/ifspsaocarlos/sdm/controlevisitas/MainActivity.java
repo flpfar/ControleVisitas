@@ -3,8 +3,8 @@ package br.edu.ifspsaocarlos.sdm.controlevisitas;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -45,13 +45,15 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.ac_main_rvdayvisits);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // Configura um dividr entre linhas, para uma melhor visualização.
+        mRecyclerView.addItemDecoration(
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
         mVisitsList = new ArrayList<>();
         mVisitsAdapter = new VisitsAdapter(this, mVisitsList);
 
         mVisitsHelper.retrieveVisits(mVisitsList, mVisitsAdapter);
-        Log.d("VISITASRETRIEVE: ", "" + mVisitsList.size());
 
-        Log.d("VISITAS: ", "" + mVisitsAdapter.getItemCount());
         mRecyclerView.setAdapter(mVisitsAdapter);
 
 

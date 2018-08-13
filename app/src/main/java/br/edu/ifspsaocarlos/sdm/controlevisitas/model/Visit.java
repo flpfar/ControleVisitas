@@ -1,5 +1,8 @@
 package br.edu.ifspsaocarlos.sdm.controlevisitas.model;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.Date;
 import java.util.Map;
 
@@ -128,5 +131,17 @@ public class Visit {
 
     public void setKeywords(Map<String, String> keywords) {
         this.keywords = keywords;
+    }
+
+    public String getDateAndTime(){
+        return date + " - " + startTime + " ~ " + isClosingTimeNull();
+    }
+
+    @Exclude
+    public String isClosingTimeNull(){
+        if(closingTime == null){
+            return "";
+        }
+        return closingTime;
     }
 }

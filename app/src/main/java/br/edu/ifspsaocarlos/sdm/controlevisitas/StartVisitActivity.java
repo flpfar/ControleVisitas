@@ -33,6 +33,7 @@ import java.util.List;
 
 import br.edu.ifspsaocarlos.sdm.controlevisitas.Utils.Constants;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Client;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsHelper;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Visit;
 
 public class StartVisitActivity extends AppCompatActivity {
@@ -51,6 +52,7 @@ public class StartVisitActivity extends AppCompatActivity {
     private ImageButton timeImageButton;
     private EditText reasonEditText;
     private Button startVisitButton;
+    private FirebaseVisitsHelper mVisitsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class StartVisitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start_visit);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mVisitsHelper = new FirebaseVisitsHelper(mDatabase);
 
         clientSpinner = findViewById(R.id.ac_start_spinnerclient);
         clientAddButton = findViewById(R.id.ac_start_btaddclient);
@@ -73,7 +76,8 @@ public class StartVisitActivity extends AppCompatActivity {
         clientAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Ir para addclientactivity
+                //vai para addclientactivity
+                startActivity(new Intent(StartVisitActivity.this, AddClientActivity.class));
             }
         });
 
@@ -111,7 +115,6 @@ public class StartVisitActivity extends AppCompatActivity {
                 openDatePicker();
             }
         });
-
         dateImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,15 +122,12 @@ public class StartVisitActivity extends AppCompatActivity {
 
             }
         });
-
-
         timeEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openTimePicker();
             }
         });
-
         timeImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,11 +209,13 @@ public class StartVisitActivity extends AppCompatActivity {
     }
 
     private void startVisit(String client, String date, String time, String reason){
-        String id = mDatabase.child(Constants.FIREBASE_VISITS).push().getKey();
+        //String id = mDatabase.child(Constants.FIREBASE_VISITS).push().getKey();
         Visit visit = new Visit(client, date, time, reason);
 
-        //insere visita no firebase
-        mDatabase.child(Constants.FIREBASE_VISITS).child(id).setValue(visit);
+        String id = mVisitsHelper.addVisit(visit);
+
+                //insere visita no firebase
+        //mDatabase.child(Constants.FIREBASE_VISITS).child(id).setValue(visit);
 
         //vai para detailVisitActivity
         Intent detailVisitActivityIntent = new Intent(this, DetailVisitActivity.class);

@@ -48,4 +48,12 @@ public class FirebaseVisitsHelper {
         });
     }
 
+    public String addVisit(Visit visit){
+        String id = mDatabase.child(Constants.FIREBASE_VISITS).push().getKey();
+        mDatabase.child(Constants.FIREBASE_VISITS).child(id).setValue(visit);
+        visit.setId(id);
+
+        return id;
+    }
+
 }
