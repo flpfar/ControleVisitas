@@ -61,10 +61,11 @@ public class DetailVisitActivity extends AppCompatActivity {
         //referencia bd ao id da visita
         mDatabaseVisit = FirebaseDatabase.getInstance().getReference().child(Constants.FIREBASE_VISITS).child(visitId);
 
+        //lê os dados da visita do bd
         mDatabaseVisit.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                //lê a visita e seta os textviews
                 Visit visit = dataSnapshot.getValue(Visit.class);
                 clientTextView.setText(visit.getClient());
                 startTimeTextView.setText(visit.getDate() + " - " + visit.getStartTime());
