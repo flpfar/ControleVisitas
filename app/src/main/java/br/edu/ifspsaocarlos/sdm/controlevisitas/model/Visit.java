@@ -137,6 +137,7 @@ public class Visit {
         this.keywords = keywords;
     }
 
+    @Exclude
     public String getDateAndTime(){
         return date + " - " + startTime + " ~ " + isClosingTimeNull();
     }

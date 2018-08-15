@@ -190,7 +190,9 @@ public class StartVisitActivity extends AppCompatActivity {
                 //verifica se a lista está vazia, se estiver mostra toast e envia para 'AddClientActivity';
                 if(clients.isEmpty()){
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_clients_toast), Toast.LENGTH_LONG).show();
-                    //TODO: Ir para AddClientActivity
+
+                    //vai para addclientactivity
+                    startActivity(new Intent(StartVisitActivity.this, AddClientActivity.class));
                 } else {
                     //cria o adapter e seta o spinner
                     ArrayAdapter<String> clientsAdapter =
@@ -210,7 +212,6 @@ public class StartVisitActivity extends AppCompatActivity {
     }
 
     private void startVisit(String client, String date, String time, String reason){
-        //String id = mDatabase.child(Constants.FIREBASE_VISITS).push().getKey();
         Visit visit = new Visit(client, date, time, reason);
 
         //insere visita no firebase
@@ -230,7 +231,4 @@ public class StartVisitActivity extends AppCompatActivity {
             }
         }, visit);
     }
-
-    //TODO: Setar data e hora atual automaticamente no date e time EditText - DONE
-    //TODO: Criar DatePicker e TimePicker nos campos de data e hora
 }
