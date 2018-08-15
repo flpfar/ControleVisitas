@@ -33,6 +33,7 @@ import java.util.List;
 
 import br.edu.ifspsaocarlos.sdm.controlevisitas.Utils.Constants;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Client;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsCallback;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsHelper;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Visit;
 
@@ -212,18 +213,22 @@ public class StartVisitActivity extends AppCompatActivity {
         //String id = mDatabase.child(Constants.FIREBASE_VISITS).push().getKey();
         Visit visit = new Visit(client, date, time, reason);
 
-        String id = mVisitsHelper.addVisit(visit);
+        //insere visita no firebase
+        mVisitsHelper.addVisit(new FirebaseVisitsCallback() {
+            @Override
+            public void onVisitsRetrieveCallback(ArrayList<Visit> visits) {}
 
-                //insere visita no firebase
-        //mDatabase.child(Constants.FIREBASE_VISITS).child(id).setValue(visit);
+            @Override
+            public void onVisitAddCallback(Visit visit) {
+                //vai para detailVisitActivity
+                Intent detailVisitActivityIntent = new Intent(StartVisitActivity.this, DetailVisitActivity.class);
+                detailVisitActivityIntent.putExtra(VISIT_ID, visit.getId());
+                startActivity(detailVisitActivityIntent);
 
-        //vai para detailVisitActivity
-        Intent detailVisitActivityIntent = new Intent(this, DetailVisitActivity.class);
-        detailVisitActivityIntent.putExtra(VISIT_ID, id);
-        startActivity(detailVisitActivityIntent);
-
-        //após ir para a detailVisitActivity, não deve voltar mais a essa activity
-        finish();
+                //após ir para a detailVisitActivity, não deve voltar mais a essa activity
+                finish();
+            }
+        }, visit);
     }
 
     //TODO: Setar data e hora atual automaticamente no date e time EditText - DONE

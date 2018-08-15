@@ -1,6 +1,7 @@
 package br.edu.ifspsaocarlos.sdm.controlevisitas.model;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -22,23 +23,21 @@ public class FirebaseVisitsHelper {
     private ArrayList<Visit> mVisits;
 
     public FirebaseVisitsHelper(DatabaseReference db){
-        this.mDatabase = db;
+        this.mDatabase = db.child(Constants.FIREBASE_VISITS);
         mVisits = new ArrayList<>();
     }
 
-    public void retrieveVisits(final ArrayList<Visit> visits, final VisitsAdapter adapter){
-        mDatabase.child(Constants.FIREBASE_VISITS).addValueEventListener(new ValueEventListener() {
+    public void retrieveVisits(final FirebaseVisitsCallback callback){
+        mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //limpa a lista antes de atualizá-la para não duplicar dados
-                visits.clear();
-
                 //recupera as visitas do firebase
+                ArrayList<Visit> visits = new ArrayList<>();
                 for(DataSnapshot visit : dataSnapshot.getChildren()){
                     Visit someVisit = visit.getValue(Visit.class);
                     visits.add(someVisit);
                 }
-                adapter.notifyDataSetChanged();
+                callback.onVisitsRetrieveCallback(visits);
             }
 
             @Override
@@ -48,12 +47,29 @@ public class FirebaseVisitsHelper {
         });
     }
 
-    public String addVisit(Visit visit){
-        String id = mDatabase.child(Constants.FIREBASE_VISITS).push().getKey();
-        visit.setSituation(Visit.SITUATION_INPROGRESS);
-        mDatabase.child(Constants.FIREBASE_VISITS).child(id).setValue(visit);
+//    public String addVisit(Visit visit){
+//        String id = mDatabase.push().getKey();
+//        visit.setSituation(Visit.SITUATION_INPROGRESS);
+//        mDatabase.child(id).setValue(visit);
+//
+//        return id;
+//    }
 
-        return id;
+    public void addVisit(final FirebaseVisitsCallback callback, final Visit visit){
+        final String id = mDatabase.push().getKey();
+        visit.setSituation(Visit.SITUATION_INPROGRESS);
+        visit.setId(id);
+        mDatabase.child(id).setValue(visit, new DatabaseReference.CompletionListener(){
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    System.out.println("Data could not be saved. " + databaseError.getMessage());
+                } else {
+                    System.out.println("Data saved successfully.");
+                    callback.onVisitAddCallback(visit);
+                }
+            }
+        });
     }
 
 }

@@ -39,10 +39,12 @@ public class Visit {
     }
 
 
+    @Exclude
     public String getId() {
         return id;
     }
 
+    @Exclude
     public void setId(String id) {
         this.id = id;
     }

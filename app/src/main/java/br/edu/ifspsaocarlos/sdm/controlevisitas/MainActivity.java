@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 import br.edu.ifspsaocarlos.sdm.controlevisitas.adapter.VisitsAdapter;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsCallback;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsHelper;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Visit;
 
@@ -48,13 +49,23 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
+        // cria e seta o adapter
         mVisitsList = new ArrayList<>();
         mVisitsAdapter = new VisitsAdapter(this, mVisitsList);
-
-        mVisitsHelper.retrieveVisits(mVisitsList, mVisitsAdapter);
-
         mRecyclerView.setAdapter(mVisitsAdapter);
 
+        // recupera visitas do firebase
+        mVisitsHelper.retrieveVisits(new FirebaseVisitsCallback() {
+            @Override
+            public void onVisitsRetrieveCallback(ArrayList<Visit> visits) {
+                mVisitsList.clear();
+                mVisitsList.addAll(visits);
+                mVisitsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onVisitAddCallback(Visit visit) {}
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
