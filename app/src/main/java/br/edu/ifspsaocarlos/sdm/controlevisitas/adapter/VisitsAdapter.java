@@ -1,11 +1,17 @@
 package br.edu.ifspsaocarlos.sdm.controlevisitas.adapter;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -31,7 +37,27 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitsView
 
     @Override
     public void onBindViewHolder(@NonNull VisitsViewHolder holder, int position) {
-        holder.clientName.setText(visits.get(position).getClient());
+        Visit visit = visits.get(position);
+        holder.clientName.setText(visit.getClient());
+        holder.visitDate.setText(visit.getDateAndTime());
+        String status = "";
+        switch (visit.getSituation()){
+            case Visit.SITUATION_COMPLETED:
+                status = context.getResources().getString(R.string.status_completed);
+                holder.visitStatusIcon.setColorFilter(ContextCompat.getColor(context, R.color.status_completed));
+                break;
+            case Visit.SITUATION_INPROGRESS:
+                status = context.getResources().getString(R.string.status_inprogress);
+                holder.visitStatusIcon.setColorFilter(ContextCompat.getColor(context, R.color.status_inprogress));
+                break;
+            case Visit.SITUATION_SCHEDULED:
+                status = context.getResources().getString(R.string.status_scheduled);
+                holder.visitStatusIcon.setColorFilter(ContextCompat.getColor(context, R.color.status_scheduled));
+                break;
+            default:
+                break;
+        }
+        holder.visitStatus.setText(status);
     }
 
     @Override
@@ -41,11 +67,17 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitsView
 
     public class VisitsViewHolder extends RecyclerView.ViewHolder {
         TextView clientName;
+        TextView visitDate;
+        TextView visitStatus;
+        ImageView visitStatusIcon;
 
         public VisitsViewHolder (View itemView){
             super(itemView);
 
             clientName = itemView.findViewById(R.id.rv_dayvisit_tvclient);
+            visitDate = itemView.findViewById(R.id.rv_dayvisit_tvdate);
+            visitStatus = itemView.findViewById(R.id.rv_dayvisit_tvstatus);
+            visitStatusIcon = itemView.findViewById(R.id.rv_dayvisit_ivstatus);
         }
     }
 }

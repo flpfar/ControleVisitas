@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#191919</color>
     <color name="colorPrimaryLight">#444</color>
     <color name="colorAccent">#006466</color>
+    <color name="status_inprogress">#17cc00</color>
+    <color name="status_completed">#000</color>
+    <color name="status_scheduled">#fff600</color>
 
     <color name="white">#FFF</color>
 </resources>

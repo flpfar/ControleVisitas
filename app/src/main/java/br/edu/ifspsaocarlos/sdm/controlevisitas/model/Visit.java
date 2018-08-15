@@ -1,5 +1,7 @@
 package br.edu.ifspsaocarlos.sdm.controlevisitas.model;
 
+import android.app.Application;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 

@@ -104,8 +104,8 @@ public class StartVisitActivity extends AppCompatActivity {
         int mYear = calendar.get(Calendar.YEAR);
         int mHour = calendar.get(Calendar.HOUR_OF_DAY);
         int mMinutes = calendar.get(Calendar.MINUTE);
-        String mCurrentDate =  mDay + "/" + mMonth + "/" + mYear;
-        String mCurrentTime = mHour + ":" + mMinutes;
+        String mCurrentDate =  String.format("%02d/%02d/%04d", mDay, mMonth, mYear);
+        String mCurrentTime = String.format("%02d:%02d", mHour, mMinutes);
         dateEditText.setText(mCurrentDate);
         timeEditText.setText(mCurrentTime);
 
@@ -148,7 +148,7 @@ public class StartVisitActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         month = month + 1;
-                        String selectedDate = dayOfMonth + "/" + month + "/" + year;
+                        String selectedDate = String.format("%02d/%02d/%04d", dayOfMonth, month, year);
                         dateEditText.setText(selectedDate);
                     }
                 }, year, month, day);
@@ -164,7 +164,7 @@ public class StartVisitActivity extends AppCompatActivity {
         mTimePicker = new TimePickerDialog(StartVisitActivity.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                timeEditText.setText( selectedHour + ":" + selectedMinute);
+                timeEditText.setText( String.format("%02d:%02d", selectedHour, selectedMinute));
             }
         }, hour, minute, true);//Yes 24 hour time
         //mTimePicker.setTitle("Select Time");

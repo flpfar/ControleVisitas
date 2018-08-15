@@ -47,6 +47,10 @@
     <string name="client_mail">E-mail</string>
     <string name="client_save">Salvar Cliente</string>
 
+    <string name="status_inprogress">Em Andamento</string>
+    <string name="status_completed">Encerrada</string>
+    <string name="status_scheduled">Agendada</string>
+
 
     <!-- Java String Resources -->
     <string name="no_clients_toast">Não há clientes cadastrados. Redirecionando ao cadastro de cliente... </string>

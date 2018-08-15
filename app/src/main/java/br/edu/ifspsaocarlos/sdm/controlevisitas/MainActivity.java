@@ -37,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //permite armazenar dados em cache e seta o firebasehelper
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        //seta o firebasehelper
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mVisitsHelper = new FirebaseVisitsHelper(mDatabase);
 
