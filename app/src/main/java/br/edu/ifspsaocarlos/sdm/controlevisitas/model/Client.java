@@ -1,6 +1,9 @@
 package br.edu.ifspsaocarlos.sdm.controlevisitas.model;
 
+import com.google.firebase.database.Exclude;
+
 public class Client {
+    private String id;
     private String name;
     private String contact;
     private String email;
@@ -8,11 +11,21 @@ public class Client {
 
     public Client (){}
 
-    public Client(String name, String contact, String email, String phone) {
+    public Client(String name, String contact, String phone, String email) {
         this.name = name;
         this.contact = contact;
         this.email = email;
         this.phone = phone;
+    }
+
+    @Exclude
+    public String getId() {
+        return id;
+    }
+
+    @Exclude
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

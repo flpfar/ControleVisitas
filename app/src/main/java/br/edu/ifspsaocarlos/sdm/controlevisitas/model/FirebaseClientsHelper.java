@@ -12,48 +12,45 @@ import java.util.ArrayList;
 
 import br.edu.ifspsaocarlos.sdm.controlevisitas.Utils.Constants;
 
-public class FirebaseVisitsHelper {
+public class FirebaseClientsHelper {
     private DatabaseReference mDatabase;
 
-    public FirebaseVisitsHelper(DatabaseReference db){
-        this.mDatabase = db.child(Constants.FIREBASE_VISITS);
+    public FirebaseClientsHelper(DatabaseReference db){
+        this.mDatabase = db.child(Constants.FIREBASE_CLIENTS);
     }
 
-    public void retrieveVisits(final FirebaseVisitsCallback callback){
-        mDatabase.addValueEventListener(new ValueEventListener() {
+    public void retrieveClients(final FirebaseClientsCallback callback){
+        mDatabase.orderByChild("name").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //recupera as visitas do firebase
-                ArrayList<Visit> visits = new ArrayList<>();
-                for(DataSnapshot visit : dataSnapshot.getChildren()){
-                    Visit someVisit = visit.getValue(Visit.class);
-                    visits.add(someVisit);
+                ArrayList<Client> clients = new ArrayList<>();
+                for(DataSnapshot client : dataSnapshot.getChildren()){
+                    Client someClient = client.getValue(Client.class);
+                    clients.add(someClient);
                 }
-                callback.onVisitsRetrieveCallback(visits);
+                callback.onClientsRetrieveCallback(clients);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                //ERROR
+
             }
         });
     }
 
-    public void addVisit(final Visit visit, final FirebaseVisitsCallback callback){
+    public void addClient(final Client client, final FirebaseClientsCallback callback){
         final String id = mDatabase.push().getKey();
-        visit.setSituation(Visit.SITUATION_INPROGRESS);
-        visit.setId(id);
-            mDatabase.child(id).setValue(visit, new DatabaseReference.CompletionListener(){
+        client.setId(id);
+        mDatabase.child(id).setValue(client, new DatabaseReference.CompletionListener(){
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                 if (databaseError != null) {
                     System.out.println("Data could not be saved. " + databaseError.getMessage());
                 } else {
                     System.out.println("Data saved successfully.");
-                    callback.onVisitAddCallback(visit);
+                    callback.onClientAddCallback(client);
                 }
             }
         });
     }
-
 }

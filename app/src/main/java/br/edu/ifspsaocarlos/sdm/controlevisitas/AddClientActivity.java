@@ -9,12 +9,17 @@ import android.widget.EditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 import br.edu.ifspsaocarlos.sdm.controlevisitas.Utils.Constants;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Client;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseClientsCallback;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseClientsHelper;
 
 public class AddClientActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
+    private FirebaseClientsHelper mClientsHelper;
 
     private EditText nameEditText;
     private EditText contactEditText;
@@ -28,6 +33,8 @@ public class AddClientActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_client);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mClientsHelper = new FirebaseClientsHelper(mDatabase);
+
 
         nameEditText = findViewById(R.id.ac_addclient_etname);
         contactEditText = findViewById(R.id.ac_addclient_etcontact);
@@ -38,7 +45,9 @@ public class AddClientActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = nameEditText.getText().toString().trim();
+
+                //TODO: rvdayvisit -> fix layout for big clients names
+                String name = nameEditText.getText().toString().trim().toUpperCase();
                 String contact = contactEditText.getText().toString().trim();
                 String phone = phoneEditText.getText().toString().trim();
                 String email = emailEditText.getText().toString().trim();
@@ -49,12 +58,17 @@ public class AddClientActivity extends AppCompatActivity {
     }
 
     private void saveClient(String name, String contact, String phone, String email){
-        String id = mDatabase.child(Constants.FIREBASE_CLIENTS).push().getKey();
-        Client client = new Client(name, contact, email, phone);
+        Client client = new Client(name, contact, phone, email);
 
         //insere cliente no firebase
-        mDatabase.child(Constants.FIREBASE_CLIENTS).child(id).setValue(client);
+        mClientsHelper.addClient(client, new FirebaseClientsCallback() {
+            @Override
+            public void onClientAddCallback(Client client) {
+                finish();
+            }
 
-        finish();
+            @Override
+            public void onClientsRetrieveCallback(ArrayList<Client> clients) {}
+        });
     }
 }

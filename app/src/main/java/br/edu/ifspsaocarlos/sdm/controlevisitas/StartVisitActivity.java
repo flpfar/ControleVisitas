@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,21 +17,15 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
-import br.edu.ifspsaocarlos.sdm.controlevisitas.Utils.Constants;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Client;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseClientsCallback;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseClientsHelper;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsCallback;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsHelper;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Visit;
@@ -44,6 +37,8 @@ public class StartVisitActivity extends AppCompatActivity {
     public static final int DIALOG_ID_TIME = 2;
 
     private DatabaseReference mDatabase;
+    private FirebaseVisitsHelper mVisitsHelper;
+    private FirebaseClientsHelper mClientsHelper;
 
     private Spinner clientSpinner;
     private ImageButton clientAddButton;
@@ -53,7 +48,7 @@ public class StartVisitActivity extends AppCompatActivity {
     private ImageButton timeImageButton;
     private EditText reasonEditText;
     private Button startVisitButton;
-    private FirebaseVisitsHelper mVisitsHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +57,7 @@ public class StartVisitActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mVisitsHelper = new FirebaseVisitsHelper(mDatabase);
+        mClientsHelper = new FirebaseClientsHelper(mDatabase);
 
         clientSpinner = findViewById(R.id.ac_start_spinnerclient);
         clientAddButton = findViewById(R.id.ac_start_btaddclient);
@@ -173,49 +169,79 @@ public class StartVisitActivity extends AppCompatActivity {
     }
 
     private void populateClientSpinner(){
-        mDatabase.child(Constants.FIREBASE_CLIENTS).addValueEventListener(new ValueEventListener() {
+
+        mClientsHelper.retrieveClients(new FirebaseClientsCallback() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final List<String> clients = new ArrayList<String>();
+            public void onClientAddCallback(Client client) {}
 
-                //zera o adapter para sempre pegar atualizações dos dados
-                //clientSpinner.setAdapter(null);
-
-                //pega os clients do firebase e coloca seus nomes numa lista para popular o spinner
-                for(DataSnapshot client : dataSnapshot.getChildren()){
-                    String clientName = client.child("name").getValue(String.class);
-                    clients.add(clientName);
-                }
-
-                //verifica se a lista está vazia, se estiver mostra toast e envia para 'AddClientActivity';
+            @Override
+            public void onClientsRetrieveCallback(ArrayList<Client> clients) {
                 if(clients.isEmpty()){
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_clients_toast), Toast.LENGTH_LONG).show();
 
                     //vai para addclientactivity
                     startActivity(new Intent(StartVisitActivity.this, AddClientActivity.class));
                 } else {
+                    ArrayList<String> clientsNames = new ArrayList<>();
+                    for(Client client : clients){
+                        clientsNames.add(client.getName());
+                    }
+
                     //cria o adapter e seta o spinner
                     ArrayAdapter<String> clientsAdapter =
-                            new ArrayAdapter<String>(StartVisitActivity.this, android.R.layout.simple_spinner_item, clients);
+                            new ArrayAdapter<String>(StartVisitActivity.this, android.R.layout.simple_spinner_item, clientsNames);
                     clientsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     clientSpinner.setAdapter(clientsAdapter);
                 }
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                //ERROR
             }
         });
+
+        //verifica se a lista está vazia, se estiver mostra toast e envia para 'AddClientActivity';
+
+
+//        mDatabase.child(Constants.FIREBASE_CLIENTS).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                final List<String> clients = new ArrayList<String>();
+//
+//                //zera o adapter para sempre pegar atualizações dos dados
+//                //clientSpinner.setAdapter(null);
+//
+//                //pega os clients do firebase e coloca seus nomes numa lista para popular o spinner
+//                for(DataSnapshot client : dataSnapshot.getChildren()){
+//                    String clientName = client.child("name").getValue(String.class);
+//                    clients.add(clientName);
+//                }
+//
+//                //verifica se a lista está vazia, se estiver mostra toast e envia para 'AddClientActivity';
+//                if(clients.isEmpty()){
+//                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_clients_toast), Toast.LENGTH_LONG).show();
+//
+//                    //vai para addclientactivity
+//                    startActivity(new Intent(StartVisitActivity.this, AddClientActivity.class));
+//                } else {
+//                    //cria o adapter e seta o spinner
+//                    ArrayAdapter<String> clientsAdapter =
+//                            new ArrayAdapter<String>(StartVisitActivity.this, android.R.layout.simple_spinner_item, clients);
+//                    clientsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                    clientSpinner.setAdapter(clientsAdapter);
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                //ERROR
+//            }
+//        });
     }
 
     private void startVisit(String client, String date, String time, String reason){
         Visit visit = new Visit(client, date, time, reason);
 
         //insere visita no firebase
-        mVisitsHelper.addVisit(new FirebaseVisitsCallback() {
+        mVisitsHelper.addVisit(visit, new FirebaseVisitsCallback() {
             @Override
             public void onVisitsRetrieveCallback(ArrayList<Visit> visits) {}
 
@@ -229,6 +255,6 @@ public class StartVisitActivity extends AppCompatActivity {
                 //após ir para a detailVisitActivity, não deve voltar mais a essa activity
                 finish();
             }
-        }, visit);
+        });
     }
 }

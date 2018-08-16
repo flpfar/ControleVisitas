@@ -40,6 +40,7 @@
     <string name="keywords">Palavras-chave</string>
     <string name="keyword">Palavra-chave</string>
     <string name="close_visit">Encerrar Visita</string>
+    <string name="cancel_visit"><u>Cancelar Visita</u></string>
 
     <string name="client_name">Nome do Cliente</string>
     <string name="client_contact">Contato</string>
