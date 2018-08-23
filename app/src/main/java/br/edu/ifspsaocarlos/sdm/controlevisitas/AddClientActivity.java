@@ -46,7 +46,6 @@ public class AddClientActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //TODO: rvdayvisit -> fix layout for big clients names
                 String name = nameEditText.getText().toString().trim().toUpperCase();
                 String contact = contactEditText.getText().toString().trim();
                 String phone = phoneEditText.getText().toString().trim();

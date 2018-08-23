@@ -1,6 +1,8 @@
 package br.edu.ifspsaocarlos.sdm.controlevisitas.model;
 
 import android.app.Application;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -8,7 +10,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.Date;
 import java.util.Map;
 
-public class Visit {
+public class Visit implements Parcelable{
     public static final int SITUATION_SCHEDULED = 1000;
     public static final int SITUATION_INPROGRESS = 1001;
     public static final int SITUATION_COMPLETED = 1002;
@@ -38,6 +40,32 @@ public class Visit {
         this.situation = SITUATION_INPROGRESS;
     }
 
+
+    protected Visit(Parcel in) {
+        id = in.readString();
+        client = in.readString();
+        employee = in.readString();
+        date = in.readString();
+        startTime = in.readString();
+        closingTime = in.readString();
+        reason = in.readString();
+        notes = in.readString();
+        situation = in.readInt();
+        images_id = in.readString();
+        audios_id = in.readString();
+    }
+
+    public static final Creator<Visit> CREATOR = new Creator<Visit>() {
+        @Override
+        public Visit createFromParcel(Parcel in) {
+            return new Visit(in);
+        }
+
+        @Override
+        public Visit[] newArray(int size) {
+            return new Visit[size];
+        }
+    };
 
     @Exclude
     public String getId() {
@@ -148,5 +176,25 @@ public class Visit {
             return "";
         }
         return closingTime;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(client);
+        dest.writeString(employee);
+        dest.writeString(date);
+        dest.writeString(startTime);
+        dest.writeString(closingTime);
+        dest.writeString(reason);
+        dest.writeString(notes);
+        dest.writeInt(situation);
+        dest.writeString(images_id);
+        dest.writeString(audios_id);
     }
 }

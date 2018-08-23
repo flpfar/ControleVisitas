@@ -2,6 +2,7 @@ package br.edu.ifspsaocarlos.sdm.controlevisitas.model;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +28,11 @@ public class FirebaseVisitsHelper {
                 ArrayList<Visit> visits = new ArrayList<>();
                 for(DataSnapshot visit : dataSnapshot.getChildren()){
                     Visit someVisit = visit.getValue(Visit.class);
+                    try {
+                        someVisit.setId(visit.getKey());
+                    } catch (NullPointerException e){
+                        Log.e("FireBaseVisitsHelper: ", "Cant get visit key");
+                    }
                     visits.add(someVisit);
                 }
                 callback.onVisitsRetrieveCallback(visits);

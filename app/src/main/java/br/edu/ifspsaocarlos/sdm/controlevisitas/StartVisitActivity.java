@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import br.edu.ifspsaocarlos.sdm.controlevisitas.Utils.Constants;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Client;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseClientsCallback;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseClientsHelper;
@@ -32,7 +33,6 @@ import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Visit;
 
 public class StartVisitActivity extends AppCompatActivity {
 
-    public static final String VISIT_ID = "visit_id";
     public static final int DIALOG_ID_DATE = 1;
     public static final int DIALOG_ID_TIME = 2;
 
@@ -249,7 +249,7 @@ public class StartVisitActivity extends AppCompatActivity {
             public void onVisitAddCallback(Visit visit) {
                 //vai para detailVisitActivity
                 Intent detailVisitActivityIntent = new Intent(StartVisitActivity.this, DetailVisitActivity.class);
-                detailVisitActivityIntent.putExtra(VISIT_ID, visit.getId());
+                detailVisitActivityIntent.putExtra(Constants.VISIT_DATA, visit);
                 startActivity(detailVisitActivityIntent);
 
                 //após ir para a detailVisitActivity, não deve voltar mais a essa activity

@@ -1,12 +1,9 @@
 package br.edu.ifspsaocarlos.sdm.controlevisitas.adapter;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +13,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import br.edu.ifspsaocarlos.sdm.controlevisitas.DetailVisitActivity;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.R;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.Utils.Constants;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Visit;
 
 public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitsViewHolder> {
@@ -65,7 +64,7 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitsView
         return visits.size();
     }
 
-    public class VisitsViewHolder extends RecyclerView.ViewHolder {
+    public class VisitsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView clientName;
         TextView visitDate;
         TextView visitStatus;
@@ -78,6 +77,17 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitsView
             visitDate = itemView.findViewById(R.id.rv_dayvisit_tvdate);
             visitStatus = itemView.findViewById(R.id.rv_dayvisit_tvstatus);
             visitStatusIcon = itemView.findViewById(R.id.rv_dayvisit_ivstatus);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            if(position != RecyclerView.NO_POSITION){
+                Intent detailVisitActivityIntent = new Intent(context, DetailVisitActivity.class);
+                detailVisitActivityIntent.putExtra(Constants.VISIT_DATA, visits.get(position));
+                context.startActivity(detailVisitActivityIntent);
+            }
         }
     }
 }

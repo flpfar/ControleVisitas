@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:background="?android:attr/selectableItemBackground"
     android:padding="6dp">
 
-    <LinearLayout
+
+    <TextView
+        android:id="@+id/rv_dayvisit_tvclient"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Teste"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/rv_dayvisit_ivstatus"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/rv_dayvisit_tvdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginTop="8dp"
+        android:text="01/01/2018 - 14:23 ~ 15:20"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_dayvisit_tvclient" />
 
-        <TextView
-            android:id="@+id/rv_dayvisit_tvclient"
-            android:textSize="20sp"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Teste" />
-
-        <TextView
-            android:id="@+id/rv_dayvisit_tvdate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="01/01/2018 - 14:23 ~ 15:20"/>
-    </LinearLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/rv_dayvisit_ivstatus"
@@ -40,20 +40,17 @@
             app:layout_constraintEnd_toStartOf="@+id/rv_dayvisit_tvstatus"
             app:layout_constraintTop_toTopOf="@+id/rv_dayvisit_tvstatus" />
 
-        <TextView
-            android:id="@+id/rv_dayvisit_tvstatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:text="EM ANDAMENTO"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/rv_dayvisit_tvstatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:text="EM ANDAMENTO"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

@@ -1,6 +1,5 @@
 package br.edu.ifspsaocarlos.sdm.controlevisitas;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -51,31 +50,33 @@ public class DetailVisitActivity extends AppCompatActivity {
         keywordsBoxTextView = findViewById(R.id.ac_detail_tvkeywordsbox);
         closeVisitButton = findViewById(R.id.ac_detail_btclosevisit);
 
-        String visitId = getIntent().getStringExtra(StartVisitActivity.VISIT_ID);
+        Visit visit = getIntent().getParcelableExtra(Constants.VISIT_DATA);
 
-        if(visitId == null){
+        if(visit == null){
             //sem visita para popular activity. será destruida;
-            throw new IllegalArgumentException("Must pass VISIT_ID");
+            throw new IllegalArgumentException("Must pass VISIT_DATA");
         }
 
-        //referencia bd ao id da visita
-        mDatabaseVisit = FirebaseDatabase.getInstance().getReference().child(Constants.FIREBASE_VISITS).child(visitId);
+        clientTextView.setText(visit.getClient());
+        startTimeTextView.setText(visit.getDate() + " - " + visit.getStartTime());
 
-        //lê os dados da visita do bd
-        mDatabaseVisit.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //lê a visita e seta os textviews
-                Visit visit = dataSnapshot.getValue(Visit.class);
-                clientTextView.setText(visit.getClient());
-                startTimeTextView.setText(visit.getDate() + " - " + visit.getStartTime());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                //Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
+//        //referencia bd ao id da visita
+//        mDatabaseVisit = FirebaseDatabase.getInstance().getReference().child(Constants.FIREBASE_VISITS).child(visitId);
+//
+//        //lê os dados da visita do bd
+//        mDatabaseVisit.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                //lê a visita e seta os textviews
+//                Visit visit = dataSnapshot.getValue(Visit.class);
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                // Failed to read value
+//                //Log.w(TAG, "Failed to read value.", error.toException());
+//            }
+//        });
     }
 }
