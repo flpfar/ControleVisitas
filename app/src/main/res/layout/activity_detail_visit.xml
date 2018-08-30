@@ -165,21 +165,21 @@
                 app:layout_constraintTop_toTopOf="@+id/ac_detail_etkeyword"
                 app:srcCompat="@drawable/ic_add_black_24dp" />
 
-            <TextView
-                android:id="@+id/ac_detail_tvkeywordsbox"
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/ac_detail_keywordsbox"
                 android:layout_width="0dp"
-                android:layout_height="99dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:ems="10"
-                android:hint="@string/keywords"
-                android:scrollbars="vertical"
-                android:background="@drawable/edit_text_border"
-                android:backgroundTint="@color/colorPrimaryLight"
+                app:flexWrap="wrap"
+                app:alignItems="stretch"
+                app:alignContent="stretch"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ac_detail_etkeyword" />
+                app:layout_constraintTop_toBottomOf="@+id/ac_detail_etkeyword">
+
+            </com.google.android.flexbox.FlexboxLayout>
 
             <Button
                 android:id="@+id/ac_detail_btclosevisit"
@@ -193,7 +193,7 @@
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ac_detail_tvkeywordsbox" />
+                app:layout_constraintTop_toBottomOf="@+id/ac_detail_keywordsbox" />
 
             <TextView
                 android:id="@+id/ac_detail_tvcancelvisit"
