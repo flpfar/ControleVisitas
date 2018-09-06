@@ -58,7 +58,10 @@ public class DetailVisitActivity extends AppCompatActivity {
         }
 
         clientTextView.setText(visit.getClient());
-        startTimeTextView.setText(visit.getDate() + " - " + visit.getStartTime());
+        String startDateAndTime = visit.getDate() + " - " + visit.getStartTime();
+        startTimeTextView.setText(startDateAndTime);
+        String visitReason = getResources().getString(R.string.visit_reason) + " " + visit.getReason() + '\n';
+        notesEditText.setText(visitReason);
 
         addKeywordImageButton.setOnClickListener(new View.OnClickListener() {
             @Override

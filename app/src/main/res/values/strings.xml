@@ -17,11 +17,11 @@
 
 
     <!-- StartVisitActivity -->
-    <string name="client">Cliente</string>
+    <string name="client">Cliente:</string>
     <string name="visit_start_time">Início da visita:</string>
     <string name="visit_closing_time">Encerramento da visita:</string>
     <string name="at_time">às</string>
-    <string name="visit_reason">Motivo da visita</string>
+    <string name="visit_reason">Motivo da visita:</string>
 
     <string name="im_cd_calendar">Selecionar data</string>
     <string name="im_cd_clock">Selecionar hora</string>
@@ -51,6 +51,8 @@
     <string name="status_inprogress">Em Andamento</string>
     <string name="status_completed">Encerrada</string>
     <string name="status_scheduled">Agendada</string>
+
+    <string name="no_visits">Não há visitas nessa data</string>
 
 
     <!-- Java String Resources -->

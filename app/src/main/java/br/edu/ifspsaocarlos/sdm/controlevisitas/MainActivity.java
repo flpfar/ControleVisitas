@@ -11,12 +11,14 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private RecyclerView mRecyclerView;
     private TextView mDateTextView;
+    private TextView mNoVisitsTextView;
     private VisitsAdapter mVisitsAdapter;
     private ArrayList<Visit> mVisitsList;
     private int mDay, mMonth, mYear;
@@ -46,15 +49,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mNoVisitsTextView = findViewById(R.id.ac_main_novisits);
         mDateTextView = findViewById(R.id.tb_date_tvdate);
         ImageButton calendarImageButton = findViewById(R.id.tb_date_btcalendar);
 
 
         //pega a data atual e mostra no textview
-        Calendar calendar = Calendar.getInstance();
-        mDay = calendar.get(Calendar.DAY_OF_MONTH);
-        mMonth = calendar.get(Calendar.MONTH)+1;
-        mYear = calendar.get(Calendar.YEAR);
+        setToday();
         String currentDate = getCurrentDate();
 
         mDateTextView.setText(currentDate);
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mVisitsAdapter);
 
         // recupera visitas do firebase
-        loadVisits(currentDate);
+        //loadVisits(currentDate);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -96,12 +97,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadVisits(String currentDate){
+        Log.d("MAINACTIVITY: ", "ENTROU EM LOADVISITS " + currentDate);
         mVisitsHelper.loadVisitsByDate(currentDate, new FirebaseVisitsCallback() {
             @Override
             public void onVisitsLoadCallback(ArrayList<Visit> visits) {
                 mVisitsList.clear();
                 mVisitsList.addAll(visits);
                 mVisitsAdapter.notifyDataSetChanged();
+
+                if(mVisitsList.isEmpty()){
+                    mRecyclerView.setVisibility(View.GONE);
+                    mNoVisitsTextView.setVisibility(View.VISIBLE);
+                } else {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    mNoVisitsTextView.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -130,6 +140,13 @@ public class MainActivity extends AppCompatActivity {
 
     private String getCurrentDate(){
         return String.format("%02d/%02d/%04d", mDay, mMonth, mYear);
+    }
+
+    private void setToday(){
+        Calendar calendar = Calendar.getInstance();
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mMonth = calendar.get(Calendar.MONTH)+1;
+        mYear = calendar.get(Calendar.YEAR);
     }
 
     @Override
@@ -175,6 +192,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         mVisitsHelper.removeLoadVisitsByDateEventListener();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadVisits(getCurrentDate());
     }
 
     @Override
