@@ -11,7 +11,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-import br.edu.ifspsaocarlos.sdm.controlevisitas.Utils.Constants;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Client;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseClientsCallback;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseClientsHelper;
@@ -67,7 +66,7 @@ public class AddClientActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onClientsRetrieveCallback(ArrayList<Client> clients) {}
+            public void onClientsLoadCallback(ArrayList<Client> clients) {}
         });
     }
 }

@@ -4,5 +4,5 @@ import java.util.ArrayList;
 
 public interface FirebaseClientsCallback {
     void onClientAddCallback(Client client);
-    void onClientsRetrieveCallback(ArrayList<Client> clients);
+    void onClientsLoadCallback(ArrayList<Client> clients);
 }

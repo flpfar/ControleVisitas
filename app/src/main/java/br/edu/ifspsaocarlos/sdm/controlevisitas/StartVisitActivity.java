@@ -170,12 +170,12 @@ public class StartVisitActivity extends AppCompatActivity {
 
     private void populateClientSpinner(){
 
-        mClientsHelper.retrieveClients(new FirebaseClientsCallback() {
+        mClientsHelper.loadClients(new FirebaseClientsCallback() {
             @Override
             public void onClientAddCallback(Client client) {}
 
             @Override
-            public void onClientsRetrieveCallback(ArrayList<Client> clients) {
+            public void onClientsLoadCallback(ArrayList<Client> clients) {
                 if(clients.isEmpty()){
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_clients_toast), Toast.LENGTH_LONG).show();
 
@@ -243,7 +243,7 @@ public class StartVisitActivity extends AppCompatActivity {
         //insere visita no firebase
         mVisitsHelper.addVisit(visit, new FirebaseVisitsCallback() {
             @Override
-            public void onVisitsRetrieveCallback(ArrayList<Visit> visits) {}
+            public void onVisitsLoadCallback(ArrayList<Visit> visits) {}
 
             @Override
             public void onVisitAddCallback(Visit visit) {

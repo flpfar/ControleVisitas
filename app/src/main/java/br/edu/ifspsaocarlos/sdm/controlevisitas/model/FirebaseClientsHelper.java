@@ -19,7 +19,7 @@ public class FirebaseClientsHelper {
         this.mDatabase = db.child(Constants.FIREBASE_CLIENTS);
     }
 
-    public void retrieveClients(final FirebaseClientsCallback callback){
+    public void loadClients(final FirebaseClientsCallback callback){
         mDatabase.orderByChild("name").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -28,7 +28,7 @@ public class FirebaseClientsHelper {
                     Client someClient = client.getValue(Client.class);
                     clients.add(someClient);
                 }
-                callback.onClientsRetrieveCallback(clients);
+                callback.onClientsLoadCallback(clients);
             }
 
             @Override
