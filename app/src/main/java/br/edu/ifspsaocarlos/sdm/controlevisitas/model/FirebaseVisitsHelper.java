@@ -9,6 +9,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import br.edu.ifspsaocarlos.sdm.controlevisitas.Utils.Constants;
 
@@ -68,21 +70,46 @@ public class FirebaseVisitsHelper {
     }
 
     public void addVisit(final Visit visit, final FirebaseVisitsCallback callback){
-        final String id = mDatabase.child(Constants.FIREBASE_VISITS).push().getKey();
-        visit.setSituation(Visit.SITUATION_INPROGRESS);
-        visit.setId(id);
-            mDatabase.child(Constants.FIREBASE_VISITS).child(id).setValue(visit, new DatabaseReference.CompletionListener(){
+        if(visit.getId() == null) {
+            final String id = mDatabase.child(Constants.FIREBASE_VISITS).push().getKey();
+            visit.setId(id);
+        }
+
+        mDatabase.child(Constants.FIREBASE_VISITS).child(visit.getId()).setValue(visit, new DatabaseReference.CompletionListener(){
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                 if (databaseError != null) {
                     System.out.println("Data could not be saved. " + databaseError.getMessage());
                 } else {
                     System.out.println("Data saved successfully.");
+                    //quando a visita é salva, deve-se salvá-la também na tabela date e keywords.
+
                     mDatabase.child(Constants.FIREBASE_DATE_VISITS).child(visit.getDate().replace("/", "")).child(visit.getId()).setValue(visit);
+
+                    if(visit.getKeywords() != null && !visit.getKeywords().isEmpty()) {
+                        //lista de keyword está separada por "#@#". aqui eu transformo em uma lista
+                        List<String> mKeywordsList = Arrays.asList(visit.getKeywords().split(Constants.SEPARATOR));
+                        for(String keyword : mKeywordsList){
+                            mDatabase.child(Constants.FIREBASE_KEYWORDS).child(keyword).child(visit.getId()).setValue(visit);
+                        }
+                    }
+
                     callback.onVisitAddCallback(visit);
+
                 }
             }
         });
+    }
+
+    public void deleteVisit(Visit visit){
+        mDatabase.child(Constants.FIREBASE_VISITS).child(visit.getId()).removeValue();
+        mDatabase.child(Constants.FIREBASE_DATE_VISITS).child(visit.getDate().replace("/", "")).child(visit.getId()).removeValue();
+        if(visit.getKeywords() != null && !visit.getKeywords().isEmpty()) {
+            List<String> mKeywordsList = Arrays.asList(visit.getKeywords().split(Constants.SEPARATOR));
+            for (String keyword : mKeywordsList) {
+                mDatabase.child(Constants.FIREBASE_KEYWORDS).child(keyword).child(visit.getId()).removeValue();
+            }
+        }
     }
 
     public void removeLoadVisitsByDateEventListener(){

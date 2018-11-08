@@ -8,7 +8,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //permite armazenar dados em cache e
+        //permite armazenar dados em cache
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 }

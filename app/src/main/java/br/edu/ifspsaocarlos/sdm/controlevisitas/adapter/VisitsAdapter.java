@@ -1,9 +1,11 @@
 package br.edu.ifspsaocarlos.sdm.controlevisitas.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +13,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import br.edu.ifspsaocarlos.sdm.controlevisitas.DetailVisitActivity;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.R;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.StartVisitActivity;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.Utils.Constants;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsCallback;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsHelper;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Visit;
 
 public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitsViewHolder> {
     private Context context;
     private ArrayList<Visit> visits;
+    private FirebaseVisitsHelper mVisitsHelper = new FirebaseVisitsHelper(FirebaseDatabase.getInstance().getReference());
 
     public VisitsAdapter(Context context, ArrayList<Visit> visits){
         this.context = context;
@@ -82,11 +92,19 @@ public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitsView
 
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
+            final int position = getAdapterPosition();
             if(position != RecyclerView.NO_POSITION){
-                Intent detailVisitActivityIntent = new Intent(context, DetailVisitActivity.class);
-                detailVisitActivityIntent.putExtra(Constants.VISIT_DATA, visits.get(position));
-                context.startActivity(detailVisitActivityIntent);
+                final Visit clickedVisit = visits.get(position);
+                if(clickedVisit.getSituation() != Visit.SITUATION_SCHEDULED) {
+                    Intent detailVisitActivityIntent = new Intent(context, DetailVisitActivity.class);
+                    detailVisitActivityIntent.putExtra(Constants.VISIT_DATA, clickedVisit);
+                    context.startActivity(detailVisitActivityIntent);
+                }else{
+                    clickedVisit.setSituation(Visit.SITUATION_INPROGRESS);
+                    Intent startVisitActivityIntent = new Intent(context, StartVisitActivity.class);
+                    startVisitActivityIntent.putExtra(Constants.VISIT_DATA, clickedVisit);
+                    context.startActivity(startVisitActivityIntent);
+                }
             }
         }
     }

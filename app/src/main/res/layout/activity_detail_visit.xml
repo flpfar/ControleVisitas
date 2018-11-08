@@ -34,7 +34,6 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="NOME DO CLIENTE"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +55,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="01/01/01 às 14:35"
                 app:layout_constraintStart_toEndOf="@+id/ac_detail_tvstarttime"
                 app:layout_constraintTop_toTopOf="@+id/ac_detail_tvstarttime" />
 
@@ -94,7 +92,8 @@
             <EditText
                 android:id="@+id/ac_detail_etnotes"
                 android:layout_width="match_parent"
-                android:layout_height="115dp"
+                android:layout_height="wrap_content"
+                android:minHeight="150dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
@@ -112,7 +111,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="64dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="24dp"
                 android:background="@color/colorAccent"
                 android:contentDescription="@string/im_cd_image_gallery"
                 app:layout_constraintStart_toStartOf="parent"
@@ -135,11 +134,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/keywords"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ac_detail_ibimages" />
+                app:layout_constraintTop_toBottomOf="@+id/ac_detail_etkeyword" />
 
             <EditText
                 android:id="@+id/ac_detail_etkeyword"
@@ -147,13 +146,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:ems="10"
-                android:hint="@string/keyword"
+                android:hint="@string/insert_keyword"
                 android:inputType="text"
                 app:layout_constraintEnd_toStartOf="@+id/ac_detail_ibkeyword"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ac_detail_tvkeywords" />
+                app:layout_constraintTop_toBottomOf="@+id/ac_detail_ibimages" />
 
             <ImageButton
                 android:id="@+id/ac_detail_ibkeyword"
@@ -174,13 +173,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:flexWrap="wrap"
-                app:alignItems="stretch"
+                android:layout_marginTop="8dp"
                 app:alignContent="stretch"
+                app:alignItems="stretch"
+                app:flexWrap="wrap"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ac_detail_etkeyword">
+                app:layout_constraintTop_toBottomOf="@+id/ac_detail_tvkeywords">
 
             </com.google.android.flexbox.FlexboxLayout>
 
@@ -190,7 +189,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/colorAccent"
                 android:text="@string/close_visit"
                 android:textColor="@color/white"
@@ -212,6 +211,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ac_detail_btclosevisit" />
+
+            <ProgressBar
+                android:id="@+id/ac_detail_progressbar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ac_detail_keywordsbox"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

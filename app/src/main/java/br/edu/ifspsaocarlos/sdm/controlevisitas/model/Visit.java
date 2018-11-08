@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
@@ -26,8 +27,9 @@ public class Visit implements Parcelable{
     public int situation;
     public String images_id;
     public String audios_id;
+    public String keywords; //keywords will be a single string with separators
     //keywords: <id, word>
-    public Map<String, String> keywords;
+//    public Map<String, String> keywords;
 
     public Visit(){}
 
@@ -53,6 +55,7 @@ public class Visit implements Parcelable{
         situation = in.readInt();
         images_id = in.readString();
         audios_id = in.readString();
+        keywords = in.readString();
     }
 
     public static final Creator<Visit> CREATOR = new Creator<Visit>() {
@@ -66,6 +69,14 @@ public class Visit implements Parcelable{
             return new Visit[size];
         }
     };
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
 
     @Exclude
     public String getId() {
@@ -157,13 +168,13 @@ public class Visit implements Parcelable{
         this.audios_id = audios_id;
     }
 
-    public Map<String, String> getKeywords() {
-        return keywords;
-    }
-
-    public void setKeywords(Map<String, String> keywords) {
-        this.keywords = keywords;
-    }
+//    public Map<String, String> getKeywords() {
+//        return keywords;
+//    }
+//
+//    public void setKeywords(Map<String, String> keywords) {
+//        this.keywords = keywords;
+//    }
 
     @Exclude
     public String getDateAndTime(){
@@ -196,5 +207,6 @@ public class Visit implements Parcelable{
         dest.writeInt(situation);
         dest.writeString(images_id);
         dest.writeString(audios_id);
+        dest.writeString(keywords);
     }
 }

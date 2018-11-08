@@ -8,4 +8,5 @@ public class Constants {
 
 
     public static final String VISIT_DATA = "visit_data";
+    public static final String SEPARATOR = "#@#";
 }

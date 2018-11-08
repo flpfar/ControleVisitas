@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -23,8 +24,11 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import br.edu.ifspsaocarlos.sdm.controlevisitas.adapter.VisitsAdapter;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsCallback;
@@ -40,15 +44,19 @@ public class MainActivity extends AppCompatActivity {
     private TextView mNoVisitsTextView;
     private VisitsAdapter mVisitsAdapter;
     private ArrayList<Visit> mVisitsList;
+    private Button mPreviousButton;
+    private Button mNextButton;
     private int mDay, mMonth, mYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mPreviousButton = findViewById(R.id.tb_date_btback);
+        mNextButton = findViewById(R.id.tb_date_btnext);
         mNoVisitsTextView = findViewById(R.id.ac_main_novisits);
         mDateTextView = findViewById(R.id.tb_date_tvdate);
         ImageButton calendarImageButton = findViewById(R.id.tb_date_btcalendar);
@@ -68,6 +76,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mPreviousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadVisits(getPreviousDate());
+                mDateTextView.setText(getCurrentDate());
+            }
+        });
+
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadVisits(getNextDate());
+                mDateTextView.setText(getCurrentDate());
+            }
+        });
+
         //seta o firebasehelper
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mVisitsHelper = new FirebaseVisitsHelper(mDatabase);
@@ -84,10 +108,7 @@ public class MainActivity extends AppCompatActivity {
         mVisitsAdapter = new VisitsAdapter(this, mVisitsList);
         mRecyclerView.setAdapter(mVisitsAdapter);
 
-        // recupera visitas do firebase
-        //loadVisits(currentDate);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
                         mYear = year;
                         String selectedDate = getCurrentDate(); //String.format("%02d/%02d/%04d", dayOfMonth, month, year);
                         loadVisits(selectedDate);
+                        Toast.makeText(MainActivity.this, getPreviousDate(), Toast.LENGTH_SHORT).show();
                         mDateTextView.setText(selectedDate);
                     }
                 }, mYear, mMonth-1, mDay);
@@ -140,6 +162,28 @@ public class MainActivity extends AppCompatActivity {
 
     private String getCurrentDate(){
         return String.format("%02d/%02d/%04d", mDay, mMonth, mYear);
+    }
+
+    public String getPreviousDate() {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar cal = Calendar.getInstance();
+        cal.set(mYear, mMonth-1, mDay);
+        cal.add(cal.DATE, -1);
+        mYear = cal.get(Calendar.YEAR);
+        mMonth = cal.get(Calendar.MONTH)+1;
+        mDay = cal.get(Calendar.DAY_OF_MONTH);
+        return format.format(cal.getTime());
+    }
+
+    public String getNextDate() {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar cal = Calendar.getInstance();
+        cal.set(mYear, mMonth-1, mDay);
+        cal.add(cal.DATE, 1);
+        mYear = cal.get(Calendar.YEAR);
+        mMonth = cal.get(Calendar.MONTH)+1;
+        mDay = cal.get(Calendar.DAY_OF_MONTH);
+        return format.format(cal.getTime());
     }
 
     private void setToday(){
@@ -167,9 +211,6 @@ public class MainActivity extends AppCompatActivity {
         switch (id){
             case R.id.menu_item_start_visit:
                 startActivity(new Intent(MainActivity.this, StartVisitActivity.class));
-                break;
-
-            case R.id.menu_item_schedule_visit:
                 break;
 
             case R.id.menu_item_filter_visits:
