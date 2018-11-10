@@ -116,6 +116,10 @@ public class FirebaseVisitsHelper {
         mLoadVisitsByDateReference.removeEventListener(mLoadVisitsByDateEventListener);
     }
 
+    public void addVisitImage(String imageUri){
+
+    }
+
     //TODO: UpdateVisit
     //must remember to update visit in date_visits too
 

@@ -7,6 +7,7 @@
     <string name="schedule_visit">Agendar Visita</string>
     <string name="filter_visits">Filtrar Visitas</string>
     <string name="manage_clients">Gerenciar Clientes</string>
+    <string name="visit_images">Imagens da visita</string>
     <string name="about">Sobre</string>
 
     <!-- Titles -->
@@ -72,5 +73,6 @@
     <string name="cancel_scheduled_alertdialog">Deseja realmente cancelar esse agendamento?</string>
     <string name="yes">Sim</string>
     <string name="no">Não</string>
+    <string name="no_image_available">Não há imagens nessa visita!</string>
 
 </resources>

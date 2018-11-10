@@ -214,6 +214,15 @@ public class DetailVisitActivity extends AppCompatActivity {
         String startDateAndTime = visit.getDate() + " - " + visit.getStartTime();
         startTimeTextView.setText(startDateAndTime);
 
+        imagesImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent imageGallery = new Intent(DetailVisitActivity.this, ImageGalleryActivity.class);
+                imageGallery.putExtra(Constants.VISIT_DATA, visit);
+                startActivity(imageGallery);
+            }
+        });
+
         if(visit.getNotes() == null) {
             String visitReason = getResources().getString(R.string.visit_reason) + " " + visit.getReason() + '\n';
             notesEditText.setText(visitReason);

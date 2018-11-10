@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.edu.ifspsaocarlos.sdm.controlevisitas">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -24,18 +27,25 @@
         <activity
             android:name=".StartVisitActivity"
             android:label="@string/new_visit"
-            android:screenOrientation="sensorPortrait"></activity>
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".DetailVisitActivity"
             android:label="@string/visit_detail"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AddClientActivity"
             android:label="@string/im_cd_add_client"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".FilterActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".FilterActivity"
+            android:label="@string/filter_visits"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".ImageGalleryActivity"
+            android:label="@string/visit_images"
+            android:screenOrientation="sensorPortrait" />
     </application>
 
 </manifest>
