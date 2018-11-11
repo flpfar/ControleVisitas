@@ -64,6 +64,7 @@
     <!-- Java String Resources -->
     <string name="no_clients_toast">Não há clientes cadastrados. Redirecionando ao cadastro de cliente... </string>
     <string name="delete_alertdialog_message">Deseja realmente excluir essa visita?</string>
+    <string name="delete_image_alertdialog_message">Deseja realmente remover essa imagem da visita?</string>
     <string name="closetime_alertdialog_message">A visita será encerrada com a data e hora atuais.</string>
     <string name="scheduled_visit_dialog">Essa é uma visita agendada. O que deseja fazer?</string>
     <string name="save_changes_dialog">Deseja salvar alterações antes de sair?</string>

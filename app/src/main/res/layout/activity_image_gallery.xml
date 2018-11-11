@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ImageGalleryActivity">
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_gallery"
         android:background="@null"
@@ -31,6 +30,16 @@
         android:layout_alignParentEnd="true"
         android:src="@drawable/ic_add_black_24dp"
         android:layout_margin="16dp" />
+
+    <ProgressBar
+        android:id="@+id/ac_image_gallery_progressbar"
+        android:layout_height="75dp"
+        android:layout_width="75dp"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        />
 
 
 </RelativeLayout>

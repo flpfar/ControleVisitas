@@ -7,6 +7,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -110,6 +112,8 @@ public class FirebaseVisitsHelper {
                 mDatabase.child(Constants.FIREBASE_KEYWORDS).child(keyword).child(visit.getId()).removeValue();
             }
         }
+        mDatabase.child(Constants.FIREBASE_IMAGES).child(visit.getId()).removeValue();
+        //TODO: APAGAR IMAGEM DO STORAGE
     }
 
     public void removeLoadVisitsByDateEventListener(){

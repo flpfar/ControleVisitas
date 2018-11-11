@@ -218,7 +218,8 @@ public class DetailVisitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent imageGallery = new Intent(DetailVisitActivity.this, ImageGalleryActivity.class);
-                imageGallery.putExtra(Constants.VISIT_DATA, visit);
+                imageGallery.putExtra(Constants.VISIT_ID, visit.getId()
+                );
                 startActivity(imageGallery);
             }
         });

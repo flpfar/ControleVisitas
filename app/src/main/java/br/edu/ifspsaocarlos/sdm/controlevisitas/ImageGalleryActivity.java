@@ -1,120 +1,152 @@
 package br.edu.ifspsaocarlos.sdm.controlevisitas;
 
-import android.Manifest;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.iceteck.silicompressorr.SiliCompressor;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import br.edu.ifspsaocarlos.sdm.controlevisitas.Utils.Constants;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.adapter.GalleryAdapter;
-import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsCallback;
-import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsHelper;
-import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Visit;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseMediaCallback;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseMediaHelper;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.model.VisitImage;
 
 public class ImageGalleryActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback{
 
-    private FirebaseVisitsHelper mVisitsHelper;
-    private DatabaseReference mDatabase;
+    private static final int GALLERY_REQUEST = 100;
+    private static final int REQUEST_WRITE_PERMISSION = 786;
+    private static final int THUMBSIZE = 360;
+    private static final String TAG = "_ImageGalleryActivity";
+
+    private FirebaseMediaHelper mImagesHelper;
+    private DatabaseReference mDatabaseRef;
+    private StorageReference mStorageRef;
 
     private RecyclerView mRecyclerView;
-    private TextView tvEmpty;
-    private Visit mVisit;
-    private List<String> mImages;
-    private String imagesUriWithSeparator;
-    public static final int RESULT_GALLERY = 100;
-    private GalleryAdapter adapter;
+    private GalleryAdapter mGalleryAdapter;
+    private ProgressBar mProgressBar;
 
-    public static final int MY_PERMISSIONS_REQUEST_READ_MEDIA = 200;
+    private String mVisitId;
+    private Uri mImageUri;
+
+
+    private TextView mTvEmpty;
+
+    private List<VisitImage> mImages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_gallery);
         mRecyclerView = findViewById(R.id.rv_gallery);
-        tvEmpty = findViewById(R.id.tv_empty_view);
-        imagesUriWithSeparator = "";
+        mTvEmpty = findViewById(R.id.tv_empty_view);
+        mProgressBar = findViewById(R.id.ac_image_gallery_progressbar);
+        FloatingActionButton fab = findViewById(R.id.ac_image_gallery_fab);
 
-        //seta o firebasehelper
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mVisitsHelper = new FirebaseVisitsHelper(mDatabase);
+        mImages = new ArrayList<>();
+
+        //seta o firebase
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_IMAGES);
+        mStorageRef = FirebaseStorage.getInstance().getReference(Constants.FIREBASE_IMAGES);
+        mImagesHelper = new FirebaseMediaHelper(mDatabaseRef);
+
+
+        //recupera extras
+        if(getIntent().hasExtra(Constants.VISIT_ID)){
+            mVisitId = getIntent().getStringExtra(Constants.VISIT_ID);
+            if(mVisitId == null){
+                Log.e(TAG, "Must pass VISIT_ID");
+                finish();
+            }
+        } else {
+            Log.e(TAG, "Must pass VISIT_ID");
+            finish();
+        }
 
         //seta o fab
-        FloatingActionButton fab = findViewById(R.id.ac_image_gallery_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityCompat.requestPermissions(ImageGalleryActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                //requisita permissao de acesso a galeria
+                requestPermission();
             }
         });
 
-        //recupera extras
-        if(getIntent().hasExtra(Constants.VISIT_DATA)){
-            mVisit = getIntent().getParcelableExtra(Constants.VISIT_DATA);
-            if(mVisit == null){
-                throw new IllegalArgumentException("Must pass VISIT_DATA");
-            }
-        } else {
-            throw new IllegalArgumentException("Must pass VISIT_DATA");
-        }
+        setRecyclerView();
+    }
 
+    private void setRecyclerView(){
         //seta o recyclerview
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         mRecyclerView.setHasFixedSize(true);
 
-        // cria e seta o adapter
-        if(mVisit.getImages_id() != null) {
-            mImages = new ArrayList<>(Arrays.asList(mVisit.getImages_id().split(Constants.SEPARATOR)));
-        } else {
-            mImages = new ArrayList<>();
-        }
-        adapter = new GalleryAdapter(this, mImages);
-        mRecyclerView.setAdapter(adapter);
+        mGalleryAdapter = new GalleryAdapter(this, mImages, mDatabaseRef, mStorageRef);
+        mRecyclerView.setAdapter(mGalleryAdapter);
+
+        //loadimages é chamado no onResume()
     }
 
     private void loadImages(){
-        //imagesUriWithSeparator = mVisit.getImages_id();
+        mImagesHelper.loadVisitImages(mVisitId, new FirebaseMediaCallback() {
+            @Override
+            public void onImagesLoadCallback(ArrayList<VisitImage> images) {
+                //recria a lista local com os dados do banco
+                mImages.clear();
+                mImages.addAll(images);
 
-        //se tiver imagens na visita
-        if(!mImages.isEmpty()){
-            //setar visibilidade dos items
-            mRecyclerView.setVisibility(View.VISIBLE);
-            tvEmpty.setVisibility(View.GONE);
+                //atualiza o adapter
+                mGalleryAdapter.notifyDataSetChanged();
 
-//            //Uris das imagens estão todos numa string, separados por um "#@#". Tranferindo para lista.
-//            mImages = new ArrayList<>(Arrays.asList(imagesUriWithSeparator.split(Constants.SEPARATOR)));
-
-            //avisa o adapter que entraram dados na lista
-            adapter.notifyDataSetChanged();
-
-        } else { //não há imagens na visita
-            //setar visibilidade dos items
-            mRecyclerView.setVisibility(View.GONE);
-            tvEmpty.setVisibility(View.VISIBLE);
-            imagesUriWithSeparator = "";
-        }
+                //seta as visibilidades caso haja ou não imagens
+                if(mImages.isEmpty()){
+                    mRecyclerView.setVisibility(View.GONE);
+                    mTvEmpty.setVisibility(View.VISIBLE);
+                } else {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    mTvEmpty.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         loadImages();
     }
 
@@ -123,33 +155,11 @@ public class ImageGalleryActivity extends AppCompatActivity implements ActivityC
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case RESULT_GALLERY :
-                if (data != null) {
-                    //adiciono imageUri pra mImages
-                    Uri uri = data.getData();
-                    String imageUri;
-
-                    if(uri != null) {
-                        imageUri = uri.toString();
-                        Toast.makeText(this, imageUri, Toast.LENGTH_SHORT).show();
-                        mImages.add(imageUri);
-
-                        //atualiza string das imagens na visita
-                        mVisit.setImages_id(mVisit.getImages_id() + imageUri + Constants.SEPARATOR);
-
-                        //salvo no bd
-                        mVisitsHelper.addVisit(mVisit, new FirebaseVisitsCallback() {
-                            @Override
-                            public void onVisitsLoadCallback(ArrayList<Visit> visits) {}
-
-                            @Override
-                            public void onVisitAddCallback(Visit visit) {}
-                        });
-                    } else {
-                        Toast.makeText(this, "Nenhuma imagem foi selecionada", Toast.LENGTH_SHORT).show();
-                    }
-
-
+            case GALLERY_REQUEST :
+                if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+                    mImageUri = data.getData();
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    uploadFileToFirebase();
                 }
                 break;
             default:
@@ -157,51 +167,89 @@ public class ImageGalleryActivity extends AppCompatActivity implements ActivityC
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission granted and now can proceed
-                    Intent galleryIntent = new Intent(
-                            Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(galleryIntent , RESULT_GALLERY );
+    private String getFileExtension(Uri uri){
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
 
-                } else {
+    private void uploadFileToFirebase(){
+        if(mImageUri != null){
+            //comprime a imagem
+            final byte[] compressedImage = compressImage();
 
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
-                }
-                return;
-            }
-            // add other cases for more permissions
+            //seta nome para o arquivo no firebase
+            final String imageName = System.currentTimeMillis()+"."+getFileExtension(mImageUri);
+            final StorageReference fileRef = mStorageRef.child(imageName);
+
+            //upload imagem
+            fileRef.putBytes(compressedImage)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            String fireBaseImageUri = taskSnapshot.getDownloadUrl().toString();
+                            final String firebaseImageId = mDatabaseRef.child(mVisitId).push().getKey();
+                            final VisitImage visitImage = new VisitImage(mVisitId, fireBaseImageUri, firebaseImageId, imageName);
+                            mDatabaseRef.child(mVisitId).child(firebaseImageId).setValue(visitImage);
+                            mProgressBar.setVisibility(View.GONE);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(ImageGalleryActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "Nenhuma imagem foi selecionada", Toast.LENGTH_SHORT).show();
         }
     }
-//    private static final int REQUEST_WRITE_PERMISSION = 786;
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-//        if (requestCode == REQUEST_WRITE_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//            openFilePicker();
-//        }
-//    }
 
-//    private void requestPermission() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
-//        } else {
-//            openFilePicker();
-//        }
-//    }
+    private byte[] compressImage(){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            Bitmap imageBitmap = SiliCompressor.with(this).getCompressBitmap(getRealPathFromUri(this, mImageUri));
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return baos.toByteArray();
+    }
 
-//    private void openFilePicker(){
-//        Intent galleryIntent = new Intent(
-//                Intent.ACTION_PICK,
-//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        startActivityForResult(galleryIntent , RESULT_GALLERY );
-//    }
+    private String getRealPathFromUri(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_WRITE_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            openFilePicker();
+        }
+    }
+
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
+        } else {
+            openFilePicker();
+        }
+    }
+
+    private void openFilePicker(){
+        Intent galleryIntent = new Intent(
+                Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent , GALLERY_REQUEST );
+    }
 }
