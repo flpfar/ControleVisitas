@@ -39,9 +39,11 @@ public class FirebaseClientsHelper {
     }
 
     public void addClient(final Client client, final FirebaseClientsCallback callback){
-        final String id = mDatabase.push().getKey();
-        client.setId(id);
-        mDatabase.child(id).setValue(client, new DatabaseReference.CompletionListener(){
+        if(client.getId() == null){
+            final String id = mDatabase.push().getKey();
+            client.setId(id);
+        }
+        mDatabase.child(client.getId()).setValue(client, new DatabaseReference.CompletionListener(){
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                 if (databaseError != null) {

@@ -8,7 +8,9 @@
     <string name="filter_visits">Filtrar Visitas</string>
     <string name="manage_clients">Gerenciar Clientes</string>
     <string name="visit_images">Imagens da visita</string>
+    <string name="filtered_visits">Visitas Filtradas</string>
     <string name="about">Sobre</string>
+    <string name="client_data">Dados do Cliente</string>
 
     <!-- Titles -->
     <string name="main_title">Visitas Registradas</string>
@@ -23,7 +25,12 @@
     <string name="visit_start_time">Início da visita:</string>
     <string name="visit_closing_time">Encerramento da visita:</string>
     <string name="at_time">às</string>
+    <string name="to_date">até</string>
     <string name="visit_reason">Motivo da visita:</string>
+    <string name="visit_period">Período:</string>
+    <string name="all_periods">Todos</string>
+    <string name="select_period">Selecionar período</string>
+
 
     <string name="im_cd_calendar">Selecionar data</string>
     <string name="im_cd_clock">Selecionar hora</string>
@@ -33,6 +40,8 @@
     <string name="im_cd_add_keyword">Adicionar palavra-chave</string>
 
     <string name="et_hint_calendar">Data de início</string>
+    <string name="et_hint_startcalendar">Data inicial</string>
+    <string name="et_hint_endcalendar">Data final</string>
     <string name="et_hint_clock">Hora de início</string>
 
 
@@ -46,7 +55,12 @@
     <string name="close_visit">Encerrar Visita</string>
     <string name="cancel_visit"><u>Cancelar Visita</u></string>
     <string name="save_visit">Salvar</string>
-    <string name="delete_visit">Excluir</string>
+    <string name="delete_visit">Remover Visita</string>
+    <string name="modify_client">Alterar</string>
+    <string name="delete_client">Remover Cliente</string>
+    <string name="save_client">Salvar</string>
+    <string name="client_name_toast">Não é possível adicionar um cliente sem nome.</string>
+
 
     <string name="client_name">Nome do Cliente</string>
     <string name="client_contact">Contato</string>
@@ -63,11 +77,14 @@
 
     <!-- Java String Resources -->
     <string name="no_clients_toast">Não há clientes cadastrados. Redirecionando ao cadastro de cliente... </string>
+    <string name="no_clients_toast2">Não há clientes cadastrados.</string>
     <string name="delete_alertdialog_message">Deseja realmente excluir essa visita?</string>
     <string name="delete_image_alertdialog_message">Deseja realmente remover essa imagem da visita?</string>
+    <string name="delete_client_alertdialog_message">Deseja realmente remover esse cliente? Todas as visitas relacionadas a ele serão apagadas!</string>
     <string name="closetime_alertdialog_message">A visita será encerrada com a data e hora atuais.</string>
     <string name="scheduled_visit_dialog">Essa é uma visita agendada. O que deseja fazer?</string>
     <string name="save_changes_dialog">Deseja salvar alterações antes de sair?</string>
+    <string name="no_modify_client_name">Não é possível alterar o nome do cliente.</string>
     <string name="change_dateandtime">Alterar Data/Hora</string>
     <string name="cancel">Cancelar</string>
     <string name="cancel_scheduled"><u>Cancelar Agendamento</u></string>
@@ -75,5 +92,7 @@
     <string name="yes">Sim</string>
     <string name="no">Não</string>
     <string name="no_image_available">Não há imagens nessa visita!</string>
+
+    <string name="toast_visit_scheduled">Visita agendada com sucesso!</string>
 
 </resources>

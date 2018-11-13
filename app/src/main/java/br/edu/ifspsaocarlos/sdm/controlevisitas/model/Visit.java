@@ -18,6 +18,7 @@ public class Visit implements Parcelable{
 
     public String id;
     public String client;
+    public String client_id;
     public String employee;
     public String date;
     public String startTime;
@@ -56,6 +57,7 @@ public class Visit implements Parcelable{
         images_id = in.readString();
         audios_id = in.readString();
         keywords = in.readString();
+        client_id = in.readString();
     }
 
     public static final Creator<Visit> CREATOR = new Creator<Visit>() {
@@ -72,6 +74,14 @@ public class Visit implements Parcelable{
 
     public String getKeywords() {
         return keywords;
+    }
+
+    public String getClient_id() {
+        return client_id;
+    }
+
+    public void setClient_id(String client_id) {
+        this.client_id = client_id;
     }
 
     public void setKeywords(String keywords) {
@@ -208,5 +218,6 @@ public class Visit implements Parcelable{
         dest.writeString(images_id);
         dest.writeString(audios_id);
         dest.writeString(keywords);
+        dest.writeString(client_id);
     }
 }

@@ -30,7 +30,6 @@ import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Visit;
 public class VisitsAdapter extends RecyclerView.Adapter<VisitsAdapter.VisitsViewHolder> {
     private Context context;
     private ArrayList<Visit> visits;
-    private FirebaseVisitsHelper mVisitsHelper = new FirebaseVisitsHelper(FirebaseDatabase.getInstance().getReference());
 
     public VisitsAdapter(Context context, ArrayList<Visit> visits){
         this.context = context;

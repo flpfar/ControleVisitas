@@ -2,16 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="br.edu.ifspsaocarlos.sdm.controlevisitas.DetailVisitActivity">
+    tools:context="br.edu.ifspsaocarlos.sdm.controlevisitas.AddClientActivity">
     <item
-        android:id="@+id/menu_item_save_visit"
+        android:id="@+id/menu_item_modify_client"
         android:orderInCategory="100"
-        android:title="@string/save_visit"
+        android:title="@string/modify_client"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/menu_item_delete_visit"
+        android:id="@+id/menu_item_delete_client"
         android:orderInCategory="100"
-        android:title="@string/delete_visit"
+        android:title="@string/delete_client"
         android:icon="@drawable/ic_delete_black_24dp"
         app:showAsAction="ifRoom" />
+
 </menu>

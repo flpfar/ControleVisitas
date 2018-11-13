@@ -57,8 +57,8 @@ public class StartVisitActivity extends AppCompatActivity {
     private LinearLayout clientLinearLayout;
     private TextView cancelScheduledTextView;
 
-
     private Visit mVisit;
+    private ArrayList<Client> mClientsList;
 
 
     @Override
@@ -82,6 +82,8 @@ public class StartVisitActivity extends AppCompatActivity {
         startVisitButton = findViewById(R.id.ac_start_btstartvisit);
         cancelScheduledTextView = findViewById(R.id.ac_start_tvcancel);
 
+        mClientsList = new ArrayList<>();
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -100,12 +102,17 @@ public class StartVisitActivity extends AppCompatActivity {
             startVisitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    int selectedClientPosition = clientSpinner.getSelectedItemPosition();
+                    String selectedClientId = "";
+                    if(selectedClientPosition != 0){
+                        selectedClientId = mClientsList.get(selectedClientPosition).getId();
+                    }
                     String clientName = clientSpinner.getSelectedItem().toString();
                     String date = dateEditText.getText().toString();
                     String time = timeEditText.getText().toString();
                     String reason = reasonEditText.getText().toString();
 
-                    startVisit(clientName, date, time, reason, Visit.SITUATION_INPROGRESS);
+                    startVisit(clientName, selectedClientId, date, time, reason, Visit.SITUATION_INPROGRESS);
                 }
             });
 
@@ -220,12 +227,14 @@ public class StartVisitActivity extends AppCompatActivity {
         startVisitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String clientName = mVisit.getClient();
+                int selectedClientPosition = clientSpinner.getSelectedItemPosition();
+                String selectedClientId = mClientsList.get(selectedClientPosition).getId();
+                String clientName = clientSpinner.getSelectedItem().toString();
                 String date = dateEditText.getText().toString();
                 String time = timeEditText.getText().toString();
                 String reason = reasonEditText.getText().toString();
 
-                startVisit(clientName, date, time, reason, Visit.SITUATION_INPROGRESS);
+                startVisit(clientName, selectedClientId, date, time, reason, Visit.SITUATION_INPROGRESS);
             }
         });
 
@@ -253,12 +262,17 @@ public class StartVisitActivity extends AppCompatActivity {
         startVisitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int selectedClientPosition = clientSpinner.getSelectedItemPosition();
+                String selectedClientId = "";
+                if(selectedClientPosition != 0){
+                    selectedClientId = mClientsList.get(selectedClientPosition).getId();
+                }
                 String clientName = clientSpinner.getSelectedItem().toString();
                 String date = dateEditText.getText().toString();
                 String time = timeEditText.getText().toString();
                 String reason = reasonEditText.getText().toString();
 
-                startVisit(clientName, date, time, reason, Visit.SITUATION_SCHEDULED);
+                startVisit(clientName, selectedClientId, date, time, reason, Visit.SITUATION_SCHEDULED);
             }
         });
     }
@@ -268,18 +282,22 @@ public class StartVisitActivity extends AppCompatActivity {
         startVisitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int selectedClientPosition = clientSpinner.getSelectedItemPosition();
+                String selectedClientId = "";
+                if(selectedClientPosition != 0){
+                    selectedClientId = mClientsList.get(selectedClientPosition).getId();
+                }
                 String clientName = clientSpinner.getSelectedItem().toString();
                 String date = dateEditText.getText().toString();
                 String time = timeEditText.getText().toString();
                 String reason = reasonEditText.getText().toString();
 
-                startVisit(clientName, date, time, reason, Visit.SITUATION_INPROGRESS);
+                startVisit(clientName, selectedClientId, date, time, reason, Visit.SITUATION_INPROGRESS);
             }
         });
     }
 
     private void populateClientSpinner(){
-
         mClientsHelper.loadClients(new FirebaseClientsCallback() {
             @Override
             public void onClientAddCallback(Client client) {}
@@ -292,6 +310,12 @@ public class StartVisitActivity extends AppCompatActivity {
                     //vai para addclientactivity
                     startActivity(new Intent(StartVisitActivity.this, AddClientActivity.class));
                 } else {
+                    //limpa lista de clients local
+                    mClientsList.clear();
+
+                    //adciona todos clients do banco
+                    mClientsList.addAll(clients);
+
                     ArrayList<String> clientsNames = new ArrayList<>();
                     for(Client client : clients){
                         clientsNames.add(client.getName());
@@ -305,48 +329,6 @@ public class StartVisitActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
-        //verifica se a lista está vazia, se estiver mostra toast e envia para 'AddClientActivity';
-
-
-//        mDatabase.child(Constants.FIREBASE_CLIENTS).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                final List<String> clients = new ArrayList<String>();
-//
-//                //zera o adapter para sempre pegar atualizações dos dados
-//                //clientSpinner.setAdapter(null);
-//
-//                //pega os clients do firebase e coloca seus nomes numa lista para popular o spinner
-//                for(DataSnapshot client : dataSnapshot.getChildren()){
-//                    String clientName = client.child("name").getValue(String.class);
-//                    clients.add(clientName);
-//                }
-//
-//                //verifica se a lista está vazia, se estiver mostra toast e envia para 'AddClientActivity';
-//                if(clients.isEmpty()){
-//                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_clients_toast), Toast.LENGTH_LONG).show();
-//
-//                    //vai para addclientactivity
-//                    startActivity(new Intent(StartVisitActivity.this, AddClientActivity.class));
-//                } else {
-//                    //cria o adapter e seta o spinner
-//                    ArrayAdapter<String> clientsAdapter =
-//                            new ArrayAdapter<String>(StartVisitActivity.this, android.R.layout.simple_spinner_item, clients);
-//                    clientsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                    clientSpinner.setAdapter(clientsAdapter);
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                //ERROR
-//            }
-//        });
     }
 
     @Override
@@ -361,7 +343,7 @@ public class StartVisitActivity extends AppCompatActivity {
         }
     }
 
-    private void startVisit(String client, String date, String time, String reason, final int situation){
+    private void startVisit(String client, String clientId, String date, String time, String reason, final int situation){
         Visit visit;
         if(mVisit == null) {
              visit = new Visit(client, date, time, reason);
@@ -372,6 +354,7 @@ public class StartVisitActivity extends AppCompatActivity {
             visit.setReason(reason);
         }
         visit.setSituation(situation);
+        visit.setClient_id(clientId);
 
         //insere visita no firebase
         mVisitsHelper.addVisit(visit, new FirebaseVisitsCallback() {
@@ -385,6 +368,8 @@ public class StartVisitActivity extends AppCompatActivity {
                     Intent detailVisitActivityIntent = new Intent(StartVisitActivity.this, DetailVisitActivity.class);
                     detailVisitActivityIntent.putExtra(Constants.VISIT_DATA, visit);
                     startActivity(detailVisitActivityIntent);
+                } else if(situation == Visit.SITUATION_SCHEDULED){
+                    Toast.makeText(StartVisitActivity.this, getResources().getString(R.string.toast_visit_scheduled), Toast.LENGTH_SHORT).show();
                 }
 
                 //após ir para a detailVisitActivity, não deve voltar mais a essa activity

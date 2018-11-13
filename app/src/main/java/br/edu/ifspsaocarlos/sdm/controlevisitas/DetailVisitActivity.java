@@ -262,22 +262,7 @@ public class DetailVisitActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(visit.getSituation() != Visit.SITUATION_COMPLETED){
-            new AlertDialog.Builder(this)
-                    .setMessage(getResources().getString(R.string.save_changes_dialog))
-                    .setCancelable(false)
-                    .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            setVisitDataAndSave(51);
-                            Toast.makeText(DetailVisitActivity.this, "Dados salvos com sucesso!", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    })
-                    .show();
+            setVisitDataAndSave(51);
         }else{
             finish();
         }

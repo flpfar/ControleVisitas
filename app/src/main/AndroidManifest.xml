@@ -46,6 +46,14 @@
             android:name=".ImageGalleryActivity"
             android:label="@string/visit_images"
             android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".FilterResultsActivity"
+            android:label="@string/filtered_visits"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".ClientsActivity"
+            android:label="@string/manage_clients"
+            android:screenOrientation="sensorPortrait"/>
     </application>
 
 </manifest>

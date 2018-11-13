@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadVisits(String currentDate){
-        Log.d("MAINACTIVITY: ", "ENTROU EM LOADVISITS " + currentDate);
         mVisitsHelper.loadVisitsByDate(currentDate, new FirebaseVisitsCallback() {
             @Override
             public void onVisitsLoadCallback(ArrayList<Visit> visits) {
@@ -214,9 +213,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.menu_item_filter_visits:
+                startActivity(new Intent(MainActivity.this, FilterActivity.class));
                 break;
 
             case R.id.menu_item_manage_clients:
+                startActivity(new Intent(MainActivity.this, ClientsActivity.class));
                 break;
 
             case R.id.menu_item_about:

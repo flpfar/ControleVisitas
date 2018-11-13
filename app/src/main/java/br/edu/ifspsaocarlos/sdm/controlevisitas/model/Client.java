@@ -1,8 +1,11 @@
 package br.edu.ifspsaocarlos.sdm.controlevisitas.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.database.Exclude;
 
-public class Client {
+public class Client implements Parcelable {
     private String id;
     private String name;
     private String contact;
@@ -18,12 +21,30 @@ public class Client {
         this.phone = phone;
     }
 
-    @Exclude
+    protected Client(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        contact = in.readString();
+        email = in.readString();
+        phone = in.readString();
+    }
+
+    public static final Creator<Client> CREATOR = new Creator<Client>() {
+        @Override
+        public Client createFromParcel(Parcel in) {
+            return new Client(in);
+        }
+
+        @Override
+        public Client[] newArray(int size) {
+            return new Client[size];
+        }
+    };
+
     public String getId() {
         return id;
     }
 
-    @Exclude
     public void setId(String id) {
         this.id = id;
     }
@@ -58,5 +79,19 @@ public class Client {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(contact);
+        dest.writeString(email);
+        dest.writeString(phone);
     }
 }
