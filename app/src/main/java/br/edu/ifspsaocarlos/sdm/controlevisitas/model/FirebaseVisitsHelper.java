@@ -168,11 +168,27 @@ public class FirebaseVisitsHelper {
         }
         mDatabase.child(Constants.FIREBASE_CLIENT_VISITS).child(visit.getClient_id()).child(visit.getId()).removeValue();
         mDatabase.child(Constants.FIREBASE_IMAGES).child(visit.getId()).removeValue();
+        //StorageReference stRef = FirebaseStorage.getInstance().getReference();
         //TODO: APAGAR IMAGEM DO STORAGE
     }
 
-    public void deleteClientAndVisits(String clientId){
+    public void deleteClientAndVisits(final String clientId){
+        mDatabase.child(Constants.FIREBASE_CLIENT_VISITS).child(clientId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot visit : dataSnapshot.getChildren()){
+                    Visit someVisit = visit.getValue(Visit.class);
+                    deleteVisit(someVisit);
+                }
+                mDatabase.child(Constants.FIREBASE_CLIENTS).child(clientId).removeValue();
+                mDatabase.child(Constants.FIREBASE_CLIENT_VISITS).child(clientId).removeValue();
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("_FIREBASEVISITSHELPER", databaseError.getMessage());
+            }
+        });
     }
 
     public void removeLoadVisitsByDateEventListener(){

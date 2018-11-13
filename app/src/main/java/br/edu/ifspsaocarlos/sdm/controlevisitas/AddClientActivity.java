@@ -175,11 +175,12 @@ public class AddClientActivity extends AppCompatActivity {
 
             case R.id.menu_item_delete_client:
                 new AlertDialog.Builder(this)
-                        .setMessage(getResources().getString(R.string.delete_alertdialog_message))
+                        .setMessage(getResources().getString(R.string.delete_client_alertdialog_message))
                         .setCancelable(false)
                         .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 mVisitsHelper.deleteClientAndVisits(mClient.getId());
+                                finish();
                             }
                         })
                         .setNegativeButton(getResources().getString(R.string.no), null)
