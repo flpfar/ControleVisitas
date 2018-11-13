@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -33,33 +34,20 @@ import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsHelper;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Visit;
 
 public class FilterActivity extends AppCompatActivity {
-    private static final int ALL_PERIOD = 0;
-    private static final int SELECT_PERIOD = 1;
-
-    private static final int START_DATE = 0;
-    private static final int END_DATE = 1;
 
     private DatabaseReference mDatabaseRef;
     private FirebaseVisitsHelper mVisitsHelper;
     private FirebaseClientsHelper mClientsHelper;
 
+    private TextView mClientTextView;
     private Spinner mClientSpinner;
-    private LinearLayout mLnCalendars;
-    private LinearLayout mLnCalendar1;
-    private LinearLayout mLnCalendar2;
-    private EditText mEtCalendar1;
-    private EditText mEtCalendar2;
-    private ImageButton mBtCalendar1;
-    private ImageButton mBtCalendar2;
+    private TextView mKeywordTextView;
     private EditText mEtKeyword;
     private Button mBtFilter;
 
-    private int mStartDay;
-    private int mStartMonth;
-    private int mStartYear;
+    private int mFilterBy = Constants.FILTERBY_CLIENT;
 
     private ArrayList<Client> mClientsList;
-    private int mDatePeriod;
 
 
     @Override
@@ -67,25 +55,17 @@ public class FilterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
+        mClientTextView = findViewById(R.id.ac_filter_tvclient);
         mClientSpinner = findViewById(R.id.ac_filter_spinnerclient);
-        mEtCalendar1 = findViewById(R.id.ac_filter_etdate1);
-        mEtCalendar2 = findViewById(R.id.ac_filter_etdate2);
-        mBtCalendar1 = findViewById(R.id.ac_filter_ibcalendar1);
-        mBtCalendar2 = findViewById(R.id.ac_filter_ibcalendar2);
+        mKeywordTextView = findViewById(R.id.ac_filter_tvkeyword);
         mEtKeyword = findViewById(R.id.ac_filter_etkeyword);
         mBtFilter = findViewById(R.id.ac_filter_btfilter);
-        mLnCalendars = findViewById(R.id.ac_filter_linearlayout);
-        mLnCalendar1 = findViewById(R.id.ac_filter_lndate1);
-        mLnCalendar2 = findViewById(R.id.ac_filter_lndate2);
-
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         mVisitsHelper = new FirebaseVisitsHelper(mDatabaseRef);
         mClientsHelper = new FirebaseClientsHelper(mDatabaseRef);
 
         mClientsList = new ArrayList<>();
-        mDatePeriod = ALL_PERIOD;
-        mStartDay = mStartMonth = mStartYear = 9999;
 
         //seta o spinner
         populateClientSpinner();
@@ -93,98 +73,41 @@ public class FilterActivity extends AppCompatActivity {
         mBtFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int selectedClientPosition = mClientSpinner.getSelectedItemPosition();
-                String selectedClientId = "";
 
-                if(selectedClientPosition != 0){
-                    selectedClientId = mClientsList.get(selectedClientPosition).getId();
-                    Log.e("_TAG_", selectedClientPosition+mClientsList.get(selectedClientPosition).getId());
-                }
+                Intent intent = new Intent(FilterActivity.this, FilterResultsActivity.class);
+                Bundle bundle = new Bundle();
 
-                String startDate = mEtCalendar1.getText().toString();
-                String endDate = mEtCalendar2.getText().toString();
-                String keyword = mEtKeyword.getText().toString();
+                switch (mFilterBy){
+                    case Constants.FILTERBY_CLIENT:
+                        //pega cliente selecionado no spinner
+                        int selectedClientPosition = mClientSpinner.getSelectedItemPosition();
+                        String selectedClientId = mClientsList.get(selectedClientPosition).getId();
 
-                if(selectedClientId.isEmpty() && startDate.isEmpty() && keyword.isEmpty()){
-                    //nenhum parametro de filtro foi selecionado
-                    Toast.makeText(FilterActivity.this, "Não é possível realizar a operação. Selecione algum filtro.", Toast.LENGTH_SHORT).show();
-                }else {
-                    Intent intent = new Intent(FilterActivity.this, FilterResultsActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Constants.CLIENT_ID, selectedClientId);
-                    bundle.putString(Constants.START_DATE, startDate);
-                    bundle.putString(Constants.END_DATE, endDate);
-                    bundle.putString(Constants.KEYWORD, keyword);
-                    intent.putExtras(bundle);
+                        bundle.putString(Constants.CLIENT_ID, selectedClientId);
+                        bundle.putInt(Constants.FILTERBY, mFilterBy);
+                        break;
 
-                    startActivity(intent);
-                }
-            }
-        });
-
-        mBtCalendar1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDatePicker(START_DATE);
-            }
-        });
-
-        mEtCalendar1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDatePicker(START_DATE);
-            }
-        });
-
-        mBtCalendar2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDatePicker(END_DATE);
-            }
-        });
-
-        mEtCalendar2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDatePicker(END_DATE);
-            }
-        });
-    }
-
-    private void openDatePicker(final int startOrEndDate){
-        Calendar cal = Calendar.getInstance();
-        final int currentYear = cal.get(Calendar.YEAR);
-        final int currentMonth = cal.get(Calendar.MONTH);
-        final int currentDay = cal.get(Calendar.DAY_OF_MONTH);
-
-        //abre caixa para seleção de data
-        DatePickerDialog dialog = new DatePickerDialog(FilterActivity.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        month = month + 1;
-                        String selectedDate = String.format("%02d/%02d/%04d", dayOfMonth, month, year);
-
-                        if(startOrEndDate == END_DATE){
-                            //checar se a data final é menor que a inicial
-                            //se for e se ainda não foi setada a data
-//                            if(mStartDay == 9999){
-//                                Toast.makeText(FilterActivity.this, "Escolha a data inicial!", Toast.LENGTH_SHORT).show();
-//                            } else {
-//                                Toast.makeText(FilterActivity.this, "Data inicial maior que final.", Toast.LENGTH_SHORT).show();
-//                            }
-                            mEtCalendar2.setText(selectedDate);
-                        } else {
-                            //data inicial
-                            mStartDay = dayOfMonth;
-                            mStartMonth = month;
-                            mStartYear = year;
-                            mEtCalendar1.setText(selectedDate);
+                    case Constants.FILTERBY_KEYWORD:
+                        String keyword = mEtKeyword.getText().toString();
+                        if(keyword.isEmpty()){
+                            Toast.makeText(FilterActivity.this, getResources().getString(R.string.toast_keyword_needed), Toast.LENGTH_SHORT).show();
+                        }else{
+                            bundle.putString(Constants.KEYWORD, keyword);
+                            bundle.putInt(Constants.FILTERBY, mFilterBy);
                         }
-                    }
-                }, currentYear, currentMonth, currentDay);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
+                        break;
+
+                    case Constants.FILTERBY_SCHEDULED:
+                        bundle.putInt(Constants.FILTERBY, mFilterBy);
+                        break;
+
+                }
+
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void populateClientSpinner() {
@@ -201,9 +124,6 @@ public class FilterActivity extends AppCompatActivity {
 
                     //limpa lista de clients local
                     mClientsList.clear();
-
-                    //adiciona um cliente vazio para spinner sem seleção
-                    mClientsList.add(new Client(Constants.NO_CLIENT_SELECTED, "", "", ""));
 
                     //adciona todos clients do banco
                     mClientsList.addAll(clients);
@@ -229,19 +149,36 @@ public class FilterActivity extends AppCompatActivity {
 
         // Check which radio button was clicked
         switch(view.getId()) {
-            case R.id.ac_filter_rdperiodall:
+            case R.id.ac_filter_rdclient:
                 if (checked) {
-                    mDatePeriod = ALL_PERIOD;
-                    mLnCalendars.setVisibility(View.GONE);
-                    mEtCalendar1.setText("");
-                    mEtCalendar2.setText("");
-                    mStartDay = mStartMonth = mStartYear = 9999;
+                    mFilterBy = Constants.FILTERBY_CLIENT;
+                    mClientSpinner.setVisibility(View.VISIBLE);
+                    mClientTextView.setVisibility(View.VISIBLE);
+
+                    mKeywordTextView.setVisibility(View.GONE);
+                    mEtKeyword.setVisibility(View.GONE);
                 }
                 break;
-            case R.id.ac_filter_rdperiodselect:
+            case R.id.ac_filter_rdkeyword:
                 if (checked) {
-                    mDatePeriod = SELECT_PERIOD;
-                    mLnCalendars.setVisibility(View.VISIBLE);
+                    mFilterBy = Constants.FILTERBY_KEYWORD;
+
+                    mClientSpinner.setVisibility(View.GONE);
+                    mClientTextView.setVisibility(View.GONE);
+
+                    mKeywordTextView.setVisibility(View.VISIBLE);
+                    mEtKeyword.setVisibility(View.VISIBLE);
+                }
+                break;
+            case R.id.ac_filter_rdscheduled:
+                if (checked) {
+                    mFilterBy = Constants.FILTERBY_SCHEDULED;
+
+                    mClientSpinner.setVisibility(View.GONE);
+                    mClientTextView.setVisibility(View.GONE);
+
+                    mKeywordTextView.setVisibility(View.GONE);
+                    mEtKeyword.setVisibility(View.GONE);
                 }
                 break;
         }

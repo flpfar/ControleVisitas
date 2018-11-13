@@ -26,9 +26,8 @@ public class FilterResultsActivity extends AppCompatActivity {
     private FirebaseVisitsHelper mVisitsHelper;
 
     private String mClientId;
-    private String mStartDate;
-    private String mEndDate;
     private String mKeyword;
+    private int mFilterBy;
 
     private RecyclerView mRecyclerView;
     private VisitsAdapter mVisitsAdapter;
@@ -52,9 +51,8 @@ public class FilterResultsActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
+            mFilterBy = bundle.getInt(Constants.FILTERBY);
             mClientId = bundle.getString(Constants.CLIENT_ID);
-            mStartDate = bundle.getString(Constants.START_DATE);
-            mEndDate = bundle.getString(Constants.END_DATE);
             mKeyword = bundle.getString(Constants.KEYWORD);
         }
 
@@ -77,7 +75,7 @@ public class FilterResultsActivity extends AppCompatActivity {
     }
 
     private void loadVisits() {
-        mVisitsHelper.loadVisitsByFilter(mClientId, mStartDate, mEndDate, mKeyword, new FirebaseVisitsCallback() {
+        mVisitsHelper.loadVisitsByFilter(mFilterBy, mClientId, mKeyword, new FirebaseVisitsCallback() {
             @Override
             public void onVisitsLoadCallback(ArrayList<Visit> visits) {
                 mVisitsList.clear();

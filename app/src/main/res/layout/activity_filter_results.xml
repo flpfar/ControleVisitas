@@ -32,6 +32,6 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:visibility="gone"
-        android:text="@string/no_visits" />
+        android:text="@string/no_filter_results" />
 
 </android.support.constraint.ConstraintLayout>

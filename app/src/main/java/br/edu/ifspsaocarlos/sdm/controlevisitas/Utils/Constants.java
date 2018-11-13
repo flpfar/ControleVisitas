@@ -16,6 +16,12 @@ public class Constants {
     public static final String START_DATE = "start_date";
     public static final String END_DATE = "start_date";
     public static final String KEYWORD = "keyword";
+    public static final String FILTERBY = "filterby";
+
+    public static final int FILTERBY_CLIENT = 0;
+    public static final int FILTERBY_KEYWORD = 1;
+    public static final int FILTERBY_SCHEDULED = 2;
+
 
     public static final String NO_CLIENT_SELECTED = "---";
 

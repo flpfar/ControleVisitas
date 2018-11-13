@@ -7,6 +7,119 @@
     tools:context=".FilterActivity">
 
     <TextView
+        android:id="@+id/ac_filter_tvfilterby"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/filter_by"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:checkedButton="@id/ac_filter_rdclient"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ac_filter_tvfilterby">
+
+        <RadioButton
+            android:id="@+id/ac_filter_rdclient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/client_field" />
+
+        <RadioButton
+            android:id="@+id/ac_filter_rdkeyword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/keyword" />
+
+        <RadioButton
+            android:id="@+id/ac_filter_rdscheduled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/scheduled_visits" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/ac_filter_tvclient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:labelFor="@id/ac_filter_spinnerclient"
+        android:text="@string/client"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+    <Spinner
+        android:id="@+id/ac_filter_spinnerclient"
+        style="@android:style/Widget.Holo.Light.Spinner"
+        android:layout_width="0dp"
+        android:layout_height="43dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="5"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ac_filter_tvclient" />
+
+    <TextView
+        android:id="@+id/ac_filter_tvkeyword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:labelFor="@id/ac_filter_etkeyword"
+        android:text="@string/keyword"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ac_filter_spinnerclient" />
+
+    <EditText
+        android:id="@+id/ac_filter_etkeyword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="text"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ac_filter_tvkeyword" />
+
+    <Button
+        android:id="@+id/ac_filter_btfilter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="92dp"
+        android:background="@color/colorAccent"
+        android:text="@string/filter_visits"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ac_filter_etkeyword" />
+
+    <!--
+    <TextView
         android:id="@+id/ac_filter_tvclient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -69,7 +182,6 @@
             android:text="@string/select_period" />
     </RadioGroup>
 
-    <!--TODO: FIX NESTED LINEAR WEIGHT -->
 
     <LinearLayout
         android:id="@+id/ac_filter_linearlayout"
@@ -158,6 +270,7 @@
 
     </LinearLayout>
 
+
     <TextView
         android:id="@+id/ac_filter_tvkeyword"
         android:layout_width="wrap_content"
@@ -167,7 +280,7 @@
         android:labelFor="@id/ac_filter_etkeyword"
         android:text="@string/keyword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ac_filter_linearlayout" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
     <EditText
         android:id="@+id/ac_filter_etkeyword"
@@ -197,6 +310,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ac_filter_etkeyword" />
+        -->
 
 
 </android.support.constraint.ConstraintLayout>

@@ -12,8 +12,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -76,33 +79,46 @@ public class FirebaseVisitsHelper {
         });
     }
 
-    public void loadVisitsByFilter(final String clientId, final String startDate, final String endDate, final String keyword, final FirebaseVisitsCallback callback){
+    public void loadVisitsByFilter(final int filterBy, final String clientId, final String keyword, final FirebaseVisitsCallback callback){
         DatabaseReference ref;
-        if(clientId.isEmpty()) {
-            if (startDate.isEmpty()) {
-                //busca por keyword
+
+        switch (filterBy){
+            case Constants.FILTERBY_CLIENT:
+                ref = mDatabase.child(Constants.FIREBASE_CLIENT_VISITS).child(clientId);
+                loadVisitsAux(ref, callback);
+                break;
+            case Constants.FILTERBY_KEYWORD:
                 ref = mDatabase.child(Constants.FIREBASE_KEYWORDS).child(keyword);
                 loadVisitsAux(ref, callback);
-            } else if (keyword.isEmpty()) {
-                //busca por periodo
+                break;
+            case Constants.FILTERBY_SCHEDULED:
+                ref = mDatabase.child(Constants.FIREBASE_VISITS);
+                ref.orderByChild("situation").equalTo(Visit.SITUATION_SCHEDULED).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        final ArrayList<Visit> visits = new ArrayList<>();
+                        for(DataSnapshot visit : dataSnapshot.getChildren()){
+                            Visit someVisit = visit.getValue(Visit.class);
+                            visits.add(someVisit);
+                        }
 
-            } else {
-                //busca por período e keyword
-            }
-        }else{
-            if(keyword.isEmpty()){
-                if(startDate.isEmpty()){
-                    //busca por cliente
-                    ref = mDatabase.child(Constants.FIREBASE_CLIENT_VISITS).child(clientId);
-                    loadVisitsAux(ref, callback);
-                }else{
-                    //busca por cliente e periodo
-                }
-            } else {
-                //busca por cliente, periodo e keyword
-            }
+                        Collections.sort(visits,new Comparator<Visit>() {
+                            @Override
+                            public int compare(Visit o1, Visit o2) {
+                                return o1.getDateInverse().compareTo(o2.getDateInverse());
+                            }
+                        });
+
+                        callback.onVisitsLoadCallback(visits);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("_FIREBASEVISITSHELPER", databaseError.getMessage());
+                    }
+                });
+                break;
         }
-
     }
 
     private void loadVisitsAux(DatabaseReference ref, final FirebaseVisitsCallback callback){

@@ -178,6 +178,16 @@ public class Visit implements Parcelable{
         this.audios_id = audios_id;
     }
 
+    @Exclude
+    public String getDateInverse(){
+        String[] arr = date.split("/");
+        String result = "";
+        for (int i = arr.length-1; i>=0; i--) {
+            result = result + arr[i];
+        }
+        return result;
+    }
+
 //    public Map<String, String> getKeywords() {
 //        return keywords;
 //    }

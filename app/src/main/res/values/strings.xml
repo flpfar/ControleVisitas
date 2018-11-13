@@ -92,6 +92,11 @@
     <string name="yes">Sim</string>
     <string name="no">Não</string>
     <string name="no_image_available">Não há imagens nessa visita!</string>
+    <string name="client_field">Cliente</string>
+    <string name="scheduled_visits">Visitas agendadas</string>
+    <string name="filter_by">Filtrar por:</string>
+    <string name="toast_keyword_needed">Insira uma palavra-chave para filtrar.</string>
+    <string name="no_filter_results">Não há resultados para este filtro.</string>
 
     <string name="toast_visit_scheduled">Visita agendada com sucesso!</string>
 
