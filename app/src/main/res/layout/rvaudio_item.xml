@@ -18,18 +18,32 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/rv_audio_btpause"
+        android:id="@+id/rv_audio_btstop"
         android:layout_width="35dp"
         android:layout_height="36dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_pause_black_24dp"
+        android:src="@drawable/ic_stop_black_24dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/rv_audio_pbplay"
+        android:layout_width="26dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_audio_btstop"
+        app:layout_constraintEnd_toEndOf="@+id/rv_audio_btstop"
+        app:layout_constraintStart_toStartOf="@+id/rv_audio_btstop"
+        app:layout_constraintTop_toTopOf="@+id/rv_audio_btstop" />
 
     <TextView
         android:id="@+id/rv_audio_tvaudioname"
