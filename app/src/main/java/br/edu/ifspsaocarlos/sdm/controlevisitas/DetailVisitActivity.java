@@ -177,12 +177,6 @@ public class DetailVisitActivity extends AppCompatActivity {
                             }
                         })
                         .setNegativeButton(getResources().getString(R.string.cancel), null)
-                        .setNeutralButton(getResources().getString(R.string.change_dateandtime), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
                         .show();
             }
         });

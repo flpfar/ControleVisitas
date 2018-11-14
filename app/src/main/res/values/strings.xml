@@ -103,6 +103,7 @@
     <string name="toast_stop_recording">Gravação finalizada! Salvando arquivo...</string>
     <string name="toast_audio_saved">Áudio salvo com sucesso!</string>
     <string name="audio">Áudio</string>
+    <string name="toast_visit_previous_date">Impossível iniciar uma visita em data anterior à atual. Selecione outra data.</string>
 
     <string name="no_audios">Não há audios nessa visita!</string>
 

@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -60,6 +61,8 @@ public class StartVisitActivity extends AppCompatActivity {
     private Visit mVisit;
     private ArrayList<Client> mClientsList;
 
+    private boolean mIsPreviousDate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,7 @@ public class StartVisitActivity extends AppCompatActivity {
         reasonEditText = findViewById(R.id.ac_start_etreason);
         startVisitButton = findViewById(R.id.ac_start_btstartvisit);
         cancelScheduledTextView = findViewById(R.id.ac_start_tvcancel);
+        mIsPreviousDate = false;
 
         mClientsList = new ArrayList<>();
 
@@ -102,17 +106,21 @@ public class StartVisitActivity extends AppCompatActivity {
             startVisitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int selectedClientPosition = clientSpinner.getSelectedItemPosition();
-                    String selectedClientId = "";
-                    if(selectedClientPosition != 0){
-                        selectedClientId = mClientsList.get(selectedClientPosition).getId();
-                    }
-                    String clientName = clientSpinner.getSelectedItem().toString();
-                    String date = dateEditText.getText().toString();
-                    String time = timeEditText.getText().toString();
-                    String reason = reasonEditText.getText().toString();
+                    if(!mIsPreviousDate) {
+                        int selectedClientPosition = clientSpinner.getSelectedItemPosition();
+                        String selectedClientId = "";
+                        if (selectedClientPosition != 0) {
+                            selectedClientId = mClientsList.get(selectedClientPosition).getId();
+                        }
+                        String clientName = clientSpinner.getSelectedItem().toString();
+                        String date = dateEditText.getText().toString();
+                        String time = timeEditText.getText().toString();
+                        String reason = reasonEditText.getText().toString();
 
-                    startVisit(clientName, selectedClientId, date, time, reason, Visit.SITUATION_INPROGRESS);
+                        startVisit(clientName, selectedClientId, date, time, reason, Visit.SITUATION_INPROGRESS);
+                    }else{
+                        Toast.makeText(StartVisitActivity.this, getResources().getString(R.string.toast_visit_previous_date), Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
 
@@ -129,13 +137,13 @@ public class StartVisitActivity extends AppCompatActivity {
     private void setDateAndTimeClickListeners(){
         //insere data e hora atuais nos EditText
         Calendar calendar = Calendar.getInstance();
-        int mDay = calendar.get(Calendar.DAY_OF_MONTH);
-        int mMonth = calendar.get(Calendar.MONTH)+1;
-        int mYear = calendar.get(Calendar.YEAR);
-        int mHour = calendar.get(Calendar.HOUR_OF_DAY);
-        int mMinutes = calendar.get(Calendar.MINUTE);
-        String mCurrentDate =  String.format("%02d/%02d/%04d", mDay, mMonth, mYear);
-        String mCurrentTime = String.format("%02d:%02d", mHour, mMinutes);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH)+1;
+        int year = calendar.get(Calendar.YEAR);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = calendar.get(Calendar.MINUTE);
+        String mCurrentDate =  String.format("%02d/%02d/%04d", day, month, year);
+        String mCurrentTime = String.format("%02d:%02d", hour, minutes);
         dateEditText.setText(mCurrentDate);
         timeEditText.setText(mCurrentTime);
 
@@ -167,10 +175,14 @@ public class StartVisitActivity extends AppCompatActivity {
     }
 
     private void openDatePicker(){
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         final int currentYear = cal.get(Calendar.YEAR);
         final int currentMonth = cal.get(Calendar.MONTH);
         final int currentDay = cal.get(Calendar.DAY_OF_MONTH);
+        cal.set(Calendar.MILLISECOND, 0);
+        cal.set(Calendar.HOUR , 0);
+        cal.set(Calendar.MINUTE , 0);
+        cal.set(Calendar.SECOND , 0);
 
         //abre caixa para seleção de data
         DatePickerDialog dialog = new DatePickerDialog(StartVisitActivity.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth,
@@ -179,11 +191,33 @@ public class StartVisitActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         month = month + 1;
                         String selectedDate = String.format("%02d/%02d/%04d", dayOfMonth, month, year);
+
+                        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                        Calendar selectedCal = Calendar.getInstance();
+                        selectedCal.set(year, month-1, dayOfMonth);
+                        selectedCal.set(Calendar.MILLISECOND, 0);
+                        selectedCal.set(Calendar.HOUR , 0);
+                        selectedCal.set(Calendar.MINUTE , 0);
+                        selectedCal.set(Calendar.SECOND , 0);
+                        System.out.println("_DATASELECIONADA: " + selectedCal.getTime().toString());
+                        System.out.println("_DATAATUAL: " + cal.getTime().toString());
+
                         dateEditText.setText(selectedDate);
-                        if(dayOfMonth > currentDay || month > currentMonth + 1 || year > currentYear){
-                            setScheduleLayout();
+
+                        if(selectedCal.compareTo(cal) >= 0){
+                            mIsPreviousDate = false;
+                            if(selectedCal.compareTo(cal) == 0){
+                                //mesma data
+                                setStartVisitLayout();
+                            }else{
+                                //data posterior
+                                setScheduleLayout();
+                            }
+
                         }else{
-                            setStartVisitLayout();
+                            //data selecionada é menor que a atual
+                            mIsPreviousDate = true;
+                            Toast.makeText(StartVisitActivity.this, getResources().getString(R.string.toast_visit_previous_date), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, currentYear, currentMonth, currentDay);
@@ -227,13 +261,17 @@ public class StartVisitActivity extends AppCompatActivity {
         startVisitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String selectedClientId = mVisit.getClient_id();
-                String clientName = mVisit.getClient();
-                String date = dateEditText.getText().toString();
-                String time = timeEditText.getText().toString();
-                String reason = reasonEditText.getText().toString();
+                if(!mIsPreviousDate) {
+                    String selectedClientId = mVisit.getClient_id();
+                    String clientName = mVisit.getClient();
+                    String date = dateEditText.getText().toString();
+                    String time = timeEditText.getText().toString();
+                    String reason = reasonEditText.getText().toString();
 
-                startVisit(clientName, selectedClientId, date, time, reason, Visit.SITUATION_INPROGRESS);
+                    startVisit(clientName, selectedClientId, date, time, reason, Visit.SITUATION_INPROGRESS);
+                }else{
+                    Toast.makeText(StartVisitActivity.this, getResources().getString(R.string.toast_visit_previous_date), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -261,17 +299,21 @@ public class StartVisitActivity extends AppCompatActivity {
         startVisitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int selectedClientPosition = clientSpinner.getSelectedItemPosition();
-                String selectedClientId = "";
-                if(selectedClientPosition != 0){
-                    selectedClientId = mClientsList.get(selectedClientPosition).getId();
-                }
-                String clientName = clientSpinner.getSelectedItem().toString();
-                String date = dateEditText.getText().toString();
-                String time = timeEditText.getText().toString();
-                String reason = reasonEditText.getText().toString();
+                if(!mIsPreviousDate) {
+                    int selectedClientPosition = clientSpinner.getSelectedItemPosition();
+                    String selectedClientId = "";
+                    if (selectedClientPosition != 0) {
+                        selectedClientId = mClientsList.get(selectedClientPosition).getId();
+                    }
+                    String clientName = clientSpinner.getSelectedItem().toString();
+                    String date = dateEditText.getText().toString();
+                    String time = timeEditText.getText().toString();
+                    String reason = reasonEditText.getText().toString();
 
-                startVisit(clientName, selectedClientId, date, time, reason, Visit.SITUATION_SCHEDULED);
+                    startVisit(clientName, selectedClientId, date, time, reason, Visit.SITUATION_SCHEDULED);
+                }else{
+                    Toast.makeText(StartVisitActivity.this, getResources().getString(R.string.toast_visit_previous_date), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -281,17 +323,21 @@ public class StartVisitActivity extends AppCompatActivity {
         startVisitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int selectedClientPosition = clientSpinner.getSelectedItemPosition();
-                String selectedClientId = "";
-                if(selectedClientPosition != 0){
-                    selectedClientId = mClientsList.get(selectedClientPosition).getId();
-                }
-                String clientName = clientSpinner.getSelectedItem().toString();
-                String date = dateEditText.getText().toString();
-                String time = timeEditText.getText().toString();
-                String reason = reasonEditText.getText().toString();
+                if(!mIsPreviousDate) {
+                    int selectedClientPosition = clientSpinner.getSelectedItemPosition();
+                    String selectedClientId = "";
+                    if (selectedClientPosition != 0) {
+                        selectedClientId = mClientsList.get(selectedClientPosition).getId();
+                    }
+                    String clientName = clientSpinner.getSelectedItem().toString();
+                    String date = dateEditText.getText().toString();
+                    String time = timeEditText.getText().toString();
+                    String reason = reasonEditText.getText().toString();
 
-                startVisit(clientName, selectedClientId, date, time, reason, Visit.SITUATION_INPROGRESS);
+                    startVisit(clientName, selectedClientId, date, time, reason, Visit.SITUATION_INPROGRESS);
+                }else{
+                    Toast.makeText(StartVisitActivity.this, getResources().getString(R.string.toast_visit_previous_date), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
