@@ -6,6 +6,7 @@ public class Constants {
     public static final String FIREBASE_CLIENTS = "clients";
     public static final String FIREBASE_DATE_VISITS = "date_visits";
     public static final String FIREBASE_IMAGES = "images";
+    public static final String FIREBASE_AUDIOS = "audios";
     public static final String FIREBASE_CLIENT_VISITS = "client_visits";
 
 

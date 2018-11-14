@@ -17,6 +17,7 @@ public class FirebaseMediaHelper {
     private DatabaseReference mDatabase;
     private StorageReference mStorage;
     private ValueEventListener mLoadVisitImagesListener;
+    private ValueEventListener mLoadVisitAudiosListener;
 
     public FirebaseMediaHelper(DatabaseReference db){
         this.mDatabase = db;
@@ -45,6 +46,25 @@ public class FirebaseMediaHelper {
         });
     }
 
+    public void loadVisitAudios(String visitId, final FirebaseMediaCallback callback){
+        mLoadVisitAudiosListener = mDatabase.child(visitId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final ArrayList<VisitAudio> visitAudios = new ArrayList<>();
+                for(DataSnapshot audio : dataSnapshot.getChildren()){
+                    VisitAudio someAudio = audio.getValue(VisitAudio.class);
+                    visitAudios.add(someAudio);
+                }
+                callback.onAudiosLoadCallback(visitAudios);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void deleteImage(VisitImage image) {
         mDatabase.child(image.getmVisitId()).child(image.getmImageId()).removeValue();
         StorageReference imageRef = mStorage.child(image.getmImageName());
@@ -54,6 +74,24 @@ public class FirebaseMediaHelper {
                     @Override
                     public void onSuccess(Void aVoid) {
                         //arquivo deletado
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Log.e("FIREBASEMEDIAHELPER", "FALHA AO REMOVER DO STORAGE");
+                    }
+                });
+    }
+
+    public void deleteAudio(VisitAudio audio){
+        mDatabase.child(audio.getmVisitId()).child(audio.getmAudioId()).removeValue();
+        StorageReference audioRef = mStorage.child(audio.getmAudioName());
+        audioRef.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        //arquivo removido
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

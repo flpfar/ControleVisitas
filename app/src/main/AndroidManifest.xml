@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".App"
@@ -53,7 +55,11 @@
         <activity
             android:name=".ClientsActivity"
             android:label="@string/manage_clients"
-            android:screenOrientation="sensorPortrait"/>
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".AudioGalleryActivity"
+            android:label="@string/visit_audios"
+            android:screenOrientation="sensorPortrait" />
     </application>
 
 </manifest>

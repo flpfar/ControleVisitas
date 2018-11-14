@@ -44,6 +44,7 @@ import br.edu.ifspsaocarlos.sdm.controlevisitas.Utils.Constants;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.adapter.GalleryAdapter;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseMediaCallback;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseMediaHelper;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.model.VisitAudio;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.VisitImage;
 
 public class ImageGalleryActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback{
@@ -140,6 +141,11 @@ public class ImageGalleryActivity extends AppCompatActivity implements ActivityC
                     mRecyclerView.setVisibility(View.VISIBLE);
                     mTvEmpty.setVisibility(View.GONE);
                 }
+            }
+
+            @Override
+            public void onAudiosLoadCallback(ArrayList<VisitAudio> audois) {
+
             }
         });
     }

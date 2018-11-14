@@ -1,15 +1,24 @@
 package br.edu.ifspsaocarlos.sdm.controlevisitas;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.MediaRecorder;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -25,6 +34,7 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -55,7 +65,6 @@ public class DetailVisitActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private String keywordsList;
     private List<String> mKeywordsList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,9 +227,18 @@ public class DetailVisitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent imageGallery = new Intent(DetailVisitActivity.this, ImageGalleryActivity.class);
-                imageGallery.putExtra(Constants.VISIT_ID, visit.getId()
-                );
+                imageGallery.putExtra(Constants.VISIT_ID, visit.getId());
                 startActivity(imageGallery);
+            }
+        });
+
+        audiosImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent audioGallery = new Intent(DetailVisitActivity.this, AudioGalleryActivity.class);
+                audioGallery.putExtra(Constants.VISIT_ID, visit.getId());
+                startActivity(audioGallery);
+
             }
         });
 

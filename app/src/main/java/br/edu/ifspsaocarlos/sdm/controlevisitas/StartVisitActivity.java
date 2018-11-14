@@ -227,9 +227,8 @@ public class StartVisitActivity extends AppCompatActivity {
         startVisitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int selectedClientPosition = clientSpinner.getSelectedItemPosition();
-                String selectedClientId = mClientsList.get(selectedClientPosition).getId();
-                String clientName = clientSpinner.getSelectedItem().toString();
+                String selectedClientId = mVisit.getClient_id();
+                String clientName = mVisit.getClient();
                 String date = dateEditText.getText().toString();
                 String time = timeEditText.getText().toString();
                 String reason = reasonEditText.getText().toString();

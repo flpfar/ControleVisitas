@@ -184,6 +184,8 @@ public class FirebaseVisitsHelper {
         }
         mDatabase.child(Constants.FIREBASE_CLIENT_VISITS).child(visit.getClient_id()).child(visit.getId()).removeValue();
         mDatabase.child(Constants.FIREBASE_IMAGES).child(visit.getId()).removeValue();
+        mDatabase.child(Constants.FIREBASE_AUDIOS).child(visit.getId()).removeValue();
+
         //StorageReference stRef = FirebaseStorage.getInstance().getReference();
         //TODO: APAGAR IMAGEM DO STORAGE
     }
@@ -211,6 +213,4 @@ public class FirebaseVisitsHelper {
         mLoadVisitsByDateReference.removeEventListener(mLoadVisitsByDateEventListener);
     }
 
-    //TODO: UpdateVisit
-    //must remember to update visit in date_visits too
 }

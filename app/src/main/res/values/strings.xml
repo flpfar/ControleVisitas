@@ -80,6 +80,7 @@
     <string name="no_clients_toast2">Não há clientes cadastrados.</string>
     <string name="delete_alertdialog_message">Deseja realmente excluir essa visita?</string>
     <string name="delete_image_alertdialog_message">Deseja realmente remover essa imagem da visita?</string>
+    <string name="delete_audio_alertdialog_message">Deseja realmente remover esse áudio da visita?</string>
     <string name="delete_client_alertdialog_message">Deseja realmente remover esse cliente? Todas as visitas relacionadas a ele serão apagadas!</string>
     <string name="closetime_alertdialog_message">A visita será encerrada com a data e hora atuais.</string>
     <string name="scheduled_visit_dialog">Essa é uma visita agendada. O que deseja fazer?</string>
@@ -97,6 +98,13 @@
     <string name="filter_by">Filtrar por:</string>
     <string name="toast_keyword_needed">Insira uma palavra-chave para filtrar.</string>
     <string name="no_filter_results">Não há resultados para este filtro.</string>
+    <string name="visit_audios">Áudios da visita</string>
+    <string name="toast_start_recording">Gravando áudio...</string>
+    <string name="toast_stop_recording">Gravação finalizada! Salvando arquivo...</string>
+    <string name="toast_audio_saved">Áudio salvo com sucesso!</string>
+    <string name="audio">Áudio</string>
+
+    <string name="no_audios">Não há audios nessa visita!</string>
 
     <string name="toast_visit_scheduled">Visita agendada com sucesso!</string>
 
