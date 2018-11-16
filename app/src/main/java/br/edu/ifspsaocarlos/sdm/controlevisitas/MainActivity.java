@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -151,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
                         mYear = year;
                         String selectedDate = getCurrentDate(); //String.format("%02d/%02d/%04d", dayOfMonth, month, year);
                         loadVisits(selectedDate);
-                        Toast.makeText(MainActivity.this, getPreviousDate(), Toast.LENGTH_SHORT).show();
                         mDateTextView.setText(selectedDate);
                     }
                 }, mYear, mMonth-1, mDay);
