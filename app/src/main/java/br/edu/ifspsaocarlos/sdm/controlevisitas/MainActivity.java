@@ -220,7 +220,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, ClientsActivity.class));
                 break;
 
-            case R.id.menu_item_about:
+            case R.id.menu_item_help:
+                startActivity(new Intent(MainActivity.this, HelpActivity.class));
                 break;
 
             default:

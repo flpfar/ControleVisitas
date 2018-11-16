@@ -60,6 +60,10 @@
             android:name=".AudioGalleryActivity"
             android:label="@string/visit_audios"
             android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".HelpActivity"
+            android:label="@string/help"
+            android:screenOrientation="sensorPortrait" />
     </application>
 
 </manifest>

@@ -9,7 +9,7 @@
     <string name="manage_clients">Gerenciar Clientes</string>
     <string name="visit_images">Imagens da visita</string>
     <string name="filtered_visits">Visitas Filtradas</string>
-    <string name="about">Sobre</string>
+    <string name="help">Ajuda</string>
     <string name="client_data">Dados do Cliente</string>
 
     <!-- Titles -->
@@ -111,4 +111,34 @@
 
     <string name="toast_visit_scheduled">Visita agendada com sucesso!</string>
 
+
+    <string name="help1_question">Como faço para iniciar uma nova visita?</string>
+    <string name="help1_answer">Ao chegar no cliente, é possível iniciar uma nova visita de duas formas: ou pelo acesso do menu na barra
+        superior e clicando em "Nova visita", ou selecionando o ícone "+" na parte inferior direita da tela principal. Isso dará acesso à
+        tela de "Nova visita", onde é possível iniciar a visita imediatamente apenas selecionando o cliente e opcionalmente informando
+        o motivo da visita. Já para alteração de data, a visita será agendada para a data escolhida.
+          </string>
+    <string name="help2_question">Como faço para agendar uma nova visita?</string>
+    <string name="help2_answer">Os passos são os mesmos que os de início de uma nova visita, mas na tela de "Nova visita", ao selecionar
+        a data desejada para o agendamento da visita, o botão automaticamente será alterado para "Agendar visita". Caso a data seja a mesma
+        que a atual, o botão se manterá "Iniciar visita".</string>
+    <string name="help3_question">Como faço para adicionar um cliente?</string>
+    <string name="help3_answer">Na tela principal, acesse o menu da barra superior e pressione "Gerenciar Clientes". Nessa tela aparecerão
+        todos os clientes cadastrados e, no canto inferior direito, o botão "+" permitirá que novos clientes sejam adicionados. Outra opção
+        é na tela "Nova visita", onde é possível acessar o botão de novo cliente ao lado da lista de seleção de clientes.</string>
+    <string name="help4_question">Como faço para adicionar informações à visita?</string>
+    <string name="help4_answer">Selecione a visita em andamento na tela principal, e nos detalhes da visita será possível alterar suas
+        anotações, bem como inserir imagens, áudios e palavras-chave sobre a visita. Após as alterações, selecione o botão "Salvar" no menu
+        superior ou apenas pressione o botão voltar do dispositivo que as informações serão salvas.</string>
+    <string name="help5_question">Como faço para adicionar e remover imagens na visita?</string>
+    <string name="help5_answer">Na tela de "Detalhes da visita", clique no botão com ícone de uma imagem. Será aberta a galeria de imagens
+        da visita, onde ao selecionar o botão de "+" será possível inserir uma nova imagem à visita. Para remover uma imagem, basta clicar
+        sobre ela e manter pressionado até que a tela de confirmação de exclusão surja.</string>
+    <string name="help6_question">Como faço para adicionar e remover áudios na visita?</string>
+    <string name="help6_answer">Na tela de "Detalhes da visita", clique no botão com ícone de um microfone. Será aberta a galeria de áudios
+        da visita, onde para gravar um áudio deve-se clicar e manter pressionado o ícone do microfone, e soltá-lo ao finalizar. Ao soltar,
+        o áudio será salvo e aparecerá na lista de áudios abaixo do ícone. Para removê-lo, basta tocar na lixeira ao lado do áudio.</string>
+    <string name="help7_question">Como faço para filtrar visitas?</string>
+    <string name="help7_answer">Na tela principal, acesse o menu na barra superior e pressione "Filtrar Visitas".
+        Na tela aberta aparecerão as opções de filtro, bastando preenchê-las de acordo com o filtro e tocar em "Filtrar Visitas". </string>
 </resources>
