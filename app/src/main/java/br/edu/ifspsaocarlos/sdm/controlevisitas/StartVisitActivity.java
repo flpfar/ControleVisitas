@@ -199,8 +199,8 @@ public class StartVisitActivity extends AppCompatActivity {
                         selectedCal.set(Calendar.HOUR , 0);
                         selectedCal.set(Calendar.MINUTE , 0);
                         selectedCal.set(Calendar.SECOND , 0);
-                        System.out.println("_DATASELECIONADA: " + selectedCal.getTime().toString());
-                        System.out.println("_DATAATUAL: " + cal.getTime().toString());
+//                        System.out.println("_DATASELECIONADA: " + selectedCal.getTime().toString());
+//                        System.out.println("_DATAATUAL: " + cal.getTime().toString());
 
                         dateEditText.setText(selectedDate);
 
@@ -213,7 +213,6 @@ public class StartVisitActivity extends AppCompatActivity {
                                 //data posterior
                                 setScheduleLayout();
                             }
-
                         }else{
                             //data selecionada é menor que a atual
                             mIsPreviousDate = true;
@@ -234,11 +233,11 @@ public class StartVisitActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 timeEditText.setText( String.format("%02d:%02d", selectedHour, selectedMinute));
-                if(selectedHour > hour || selectedMinute > minute){
-                    setScheduleLayout();
-                } else{
-                    setStartVisitLayout();
-                }
+//                if(selectedHour > hour || selectedMinute > minute){
+//                    setScheduleLayout();
+//                } else{
+//                    setStartVisitLayout();
+//                }
             }
         }, hour, minute, true);//Yes 24 hour time
         //mTimePicker.setTitle("Select Time");

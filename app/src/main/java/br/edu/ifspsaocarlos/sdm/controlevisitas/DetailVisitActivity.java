@@ -229,10 +229,11 @@ public class DetailVisitActivity extends AppCompatActivity {
         audiosImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent audioGallery = new Intent(DetailVisitActivity.this, AudioGalleryActivity.class);
-                audioGallery.putExtra(Constants.VISIT_ID, visit.getId());
-                startActivity(audioGallery);
-
+                if(isPermissionGranted()) {
+                    Intent audioGallery = new Intent(DetailVisitActivity.this, AudioGalleryActivity.class);
+                    audioGallery.putExtra(Constants.VISIT_ID, visit.getId());
+                    startActivity(audioGallery);
+                }
             }
         });
 
@@ -363,5 +364,42 @@ public class DetailVisitActivity extends AppCompatActivity {
             view = new View(activity);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public  boolean isPermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Log.v("TAG","Permission is granted");
+                return true;
+            } else {
+                Log.v("TAG","Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("TAG","Permission is granted");
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED ) {
+                    //permissão garantida
+                    Intent audioGallery = new Intent(DetailVisitActivity.this, AudioGalleryActivity.class);
+                    audioGallery.putExtra(Constants.VISIT_ID, visit.getId());
+                    startActivity(audioGallery);
+                } else {
+                    //sem permissão
+                }
+                return;
+            }
+        }
     }
 }

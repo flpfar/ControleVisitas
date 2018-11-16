@@ -96,6 +96,7 @@
     <string name="client_field">Cliente</string>
     <string name="scheduled_visits">Visitas agendadas</string>
     <string name="filter_by">Filtrar por:</string>
+    <string name="filtered_by">Filtro por:</string>
     <string name="toast_keyword_needed">Insira uma palavra-chave para filtrar.</string>
     <string name="no_filter_results">Não há resultados para este filtro.</string>
     <string name="visit_audios">Áudios da visita</string>
@@ -104,6 +105,7 @@
     <string name="toast_audio_saved">Áudio salvo com sucesso!</string>
     <string name="audio">Áudio</string>
     <string name="toast_visit_previous_date">Impossível iniciar uma visita em data anterior à atual. Selecione outra data.</string>
+    <string name="audio_record_helper">Mantenha o botão acima pressionado para iniciar gravação.</string>
 
     <string name="no_audios">Não há audios nessa visita!</string>
 

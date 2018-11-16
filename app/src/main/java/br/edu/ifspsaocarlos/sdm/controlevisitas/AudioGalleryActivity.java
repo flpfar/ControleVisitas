@@ -66,6 +66,7 @@ public class AudioGalleryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_gallery);
 
+
         mRecorderButton = findViewById(R.id.ac_audio_ibrecorder);
         mProgressBar = findViewById(R.id.ac_audio_progressbar);
         mRecyclerView = findViewById(R.id.ac_audio_recyclerview);
@@ -76,9 +77,9 @@ public class AudioGalleryActivity extends AppCompatActivity {
         mMediaHelper = new FirebaseMediaHelper(mDatabaseRef);
 
         //recupera extras
-        if(getIntent().hasExtra(Constants.VISIT_ID)){
+        if (getIntent().hasExtra(Constants.VISIT_ID)) {
             mVisitId = getIntent().getStringExtra(Constants.VISIT_ID);
-            if(mVisitId == null){
+            if (mVisitId == null) {
                 Log.e("AudioGalleryActivity", "Must pass VISIT_ID");
                 finish();
             }
@@ -90,16 +91,14 @@ public class AudioGalleryActivity extends AppCompatActivity {
         mRecorderButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()){
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        if(isPermissionGranted())
-                            v.setPressed(true);
-                            startRecording();
+                        v.setPressed(true);
+                        startRecording();
                         return true;
                     case MotionEvent.ACTION_UP:
-                        if(isPermissionGranted())
-                            v.setPressed(false);
-                            stopRecording();
+                        v.setPressed(false);
+                        stopRecording();
                         break;
                 }
                 return false;
@@ -212,44 +211,6 @@ public class AudioGalleryActivity extends AppCompatActivity {
 
 
     }
-
-    public  boolean isPermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO)
-                    == PackageManager.PERMISSION_GRANTED) {
-                Log.v("TAG","Permission is granted");
-                return true;
-            } else {
-
-                Log.v("TAG","Permission is revoked");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
-                return false;
-            }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
-            Log.v("TAG","Permission is granted");
-            return true;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-
-            case 1: {
-
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), "Permission granted", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
-                }
-                return;
-            }
-        }
-    }
-
 
     @Override
     protected void onResume() {

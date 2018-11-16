@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import br.edu.ifspsaocarlos.sdm.controlevisitas.Utils.Constants;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.adapter.VisitsAdapter;
+import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Client;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsCallback;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.FirebaseVisitsHelper;
 import br.edu.ifspsaocarlos.sdm.controlevisitas.model.Visit;
@@ -25,6 +26,7 @@ public class FilterResultsActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseRef;
     private FirebaseVisitsHelper mVisitsHelper;
 
+    private Client mClient;
     private String mClientId;
     private String mKeyword;
     private int mFilterBy;
@@ -34,6 +36,8 @@ public class FilterResultsActivity extends AppCompatActivity {
     private ArrayList<Visit> mVisitsList;
 
     private TextView mNoVisitsTextView;
+    private TextView mFilteredByTextView;
+
 
 
     @Override
@@ -41,6 +45,7 @@ public class FilterResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_results);
 
+        mFilteredByTextView = findViewById(R.id.ac_results_tvfilteredby);
         mNoVisitsTextView = findViewById(R.id.ac_results_novisits);
         mRecyclerView = findViewById(R.id.ac_results_recyclerview);
 
@@ -52,8 +57,28 @@ public class FilterResultsActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             mFilterBy = bundle.getInt(Constants.FILTERBY);
-            mClientId = bundle.getString(Constants.CLIENT_ID);
+            mClient = bundle.getParcelable(Constants.CLIENT_DATA);
             mKeyword = bundle.getString(Constants.KEYWORD);
+            if(mClient != null){
+                mClientId = mClient.getId();
+            }
+        }
+
+        switch (mFilterBy){
+            case Constants.FILTERBY_CLIENT: {
+                String clientText = getResources().getString(R.string.client_field) + ": " + mClient.getName();
+                mFilteredByTextView.setText(clientText);
+                break;
+            }
+            case Constants.FILTERBY_KEYWORD: {
+                String keywordText = getResources().getString(R.string.keyword) + ": " + mKeyword;
+                mFilteredByTextView.setText(keywordText);
+                break;
+            }
+            case Constants.FILTERBY_SCHEDULED: {
+                mFilteredByTextView.setText(getResources().getString(R.string.scheduled_visits));
+                break;
+            }
         }
 
         setRecyclerView();

@@ -81,10 +81,12 @@ public class FilterActivity extends AppCompatActivity {
                     case Constants.FILTERBY_CLIENT:
                         //pega cliente selecionado no spinner
                         int selectedClientPosition = mClientSpinner.getSelectedItemPosition();
-                        String selectedClientId = mClientsList.get(selectedClientPosition).getId();
+                        Client selectedClient = mClientsList.get(selectedClientPosition);
 
-                        bundle.putString(Constants.CLIENT_ID, selectedClientId);
+                        bundle.putParcelable(Constants.CLIENT_DATA, selectedClient);
                         bundle.putInt(Constants.FILTERBY, mFilterBy);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
                         break;
 
                     case Constants.FILTERBY_KEYWORD:
@@ -94,17 +96,18 @@ public class FilterActivity extends AppCompatActivity {
                         }else{
                             bundle.putString(Constants.KEYWORD, keyword);
                             bundle.putInt(Constants.FILTERBY, mFilterBy);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
                         }
                         break;
 
                     case Constants.FILTERBY_SCHEDULED:
                         bundle.putInt(Constants.FILTERBY, mFilterBy);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
                         break;
 
                 }
-
-                intent.putExtras(bundle);
-                startActivity(intent);
             }
         });
 

@@ -41,11 +41,11 @@
         android:layout_marginBottom="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ac_audio_ibrecorder" />
+        app:layout_constraintTop_toBottomOf="@+id/ac_audio_tvhelper" />
 
     <TextView
         android:id="@+id/ac_audio_tvempty"
@@ -54,5 +54,18 @@
         android:gravity="center"
         android:text="@string/no_audios"
         />
+
+    <TextView
+        android:id="@+id/ac_audio_tvhelper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center"
+        android:text="@string/audio_record_helper"
+        app:layout_constraintEnd_toEndOf="@+id/ac_audio_ibrecorder"
+        app:layout_constraintStart_toStartOf="@+id/ac_audio_ibrecorder"
+        app:layout_constraintTop_toBottomOf="@+id/ac_audio_ibrecorder" />
 
 </android.support.constraint.ConstraintLayout>
