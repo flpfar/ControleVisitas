@@ -43,6 +43,8 @@
 
 This app was built as a part of the course Systems Development for Mobile Devices, from the Federal Institute of São Paulo (IFSP) - Campus São Carlos.
 
+Project date: November 2018
+
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!
