@@ -29,6 +29,10 @@
 
 [Video - App Demo](https://www.youtube.com/watch?v=TzI9oUu-F_8)
 
+## Download .apk
+
+[ControleVisitas.apk](https://goo.gl/bjNyDt)
+
 ## 👤 Author 
 
 - Github: [@flpfar](https://github.com/flpfar)
